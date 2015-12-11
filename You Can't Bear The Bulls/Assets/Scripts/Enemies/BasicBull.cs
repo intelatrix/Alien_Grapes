@@ -10,8 +10,19 @@ public class BasicBull : MonoBehaviour
 		BULL_FATHER
 	}
 
-	public TypeOfBull BullType;
+	public void Launch(TypeOfBull type, Vector3 spawnPos, float moveSpeed, bool faceRight)
+	{
+		bullType = type;
+		transform.position = spawnPos;
+		movementSpeed = moveSpeed;
+	}
 
-	public bool IfFacingRight = true;
+	public TypeOfBull bullType;
+	private float movementSpeed = 0.0f;
+	public bool ifFacingRight = true;
 
+	// Getter Fields
+	public TypeOfBull BullType { get { return bullType; } }
+	public bool IfFacingRight { get { return ifFacingRight; } }
+	public float MovementSpeed { get { return movementSpeed; } }
 }
