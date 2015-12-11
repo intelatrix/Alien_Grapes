@@ -116,11 +116,9 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
 	void OnTriggerEnter2D(Collider2D collision)
     {
-    	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_ATTACK_MOTHER ))
+    	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_MISS || CurrentBearState == BearState.BEAR_NONE))
     	{
-	        Debug.Log("Bull Enter");   
-	        BasicBull EnteringBull = collision.GetComponent<BasicBull>();
-	        GameSceneManager.Instance.AddBullInsideList(EnteringBull);
+	        GameSceneManager.Instance.BearGetsHit(collision.gameObject);
         }
     }
 }

@@ -150,6 +150,18 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
             return ArrowKeysPressed.KEYS_NONE;
     }
 
+    public void BearGetsHit(GameObject HittingBull)
+    {
+		List<BasicBull> TempList = null;
+		if(HittingBull.GetComponent<BasicBull>().IfFacingRight)
+           	 TempList = ListOfBullLeft;
+        else
+            TempList = ListOfBullRight;
+
+        TempList.RemoveAt(0);
+    	Destroy(HittingBull);
+    }
+
     public void AddBullInsideList(BasicBull EnteringBull)
     {
         if (!EnteringBull.IfFacingRight)
