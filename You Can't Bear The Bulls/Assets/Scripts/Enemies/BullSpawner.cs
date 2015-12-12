@@ -17,7 +17,31 @@ public class BullSpawner : MonoBehaviour
 	[Tooltip("The maximum spawn rate. Is not affected by SpawnAmplitude.")]
 	public float MaxSpawnRate = 2.0f;
 	[Tooltip("The range between the min and max spawn rate when auto generated based on game progress.")]
-	public float SpawnAmplitude = 1.5f;        // Controls
+	public float SpawnAmplitude = 1.5f;
+
+	// Spawn Conditions for Special Bulls
+	[Tooltip("Chance for MotherBull to spawn at the start.")]
+	public float MotherStartSpawnChance = 10.0f;
+	[Tooltip("Number of kill points needed before the Mother spawn chance is 100%.")]
+	public int MinKilledToForceSpawnMother = 50;
+	[Tooltip("Chance for FatherBull to spawn at the start.")]
+	public float FatherStartSpawnChance = 1.0f;
+	[Tooltip("Number of kill points needed before the Father spawn chance is 100%.")]
+	public int MinKilledToForceSpawnFather = 50;
+
+	// Spawn Conditions Variables for Special Bulls
+	[Tooltip("Kill points a baby kill provides.")]
+	public int BabyForceSpawnWeight = 1;
+	[Tooltip("Kill points a mother kill provides.")]
+	public int MotherForceSpawnWeight = 5;
+
+	// Calculated Increments in Chances
+	private float spawnIncrementFather;
+	private float spawnIncrementMother;
+
+	// Track spawn chances
+	private float motherSpawnChance;
+	private float fatherSpawnChance;
 
 	// Memory of Previous Bull
 	private BasicBull[] prevBullEachSide = new BasicBull[2];        // 0 - Left, 1 - Right
@@ -25,6 +49,10 @@ public class BullSpawner : MonoBehaviour
 	// Bulls Prefabs
 	[Tooltip("The prefab that is used to clone a baby bull for spawning.")]
 	public GameObject BabyBullPrefab;
+	[Tooltip("The prefab that is used to clone a mother bull for spawning.")]
+	public GameObject MotherBullPrefab;
+	[Tooltip("The prefab that is used to clone a father bull for spawning.")]
+	public GameObject FatherBullPrefab;
 
 	// Spawn Points
 	[Tooltip("Position of the spawn point for bulls on the left.")]
@@ -34,7 +62,19 @@ public class BullSpawner : MonoBehaviour
 
 	// Spawn Limiter
 	float timeTillNextBull = 0.0f;
-	
+
+	// Start is called once at instantiation
+	void Start()
+	{
+		// Calculate Increments in Chances
+		spawnIncrementFather = (100 - FatherStartSpawnChance) / MinKilledToForceSpawnFather;
+		spawnIncrementMother = (100 - MotherStartSpawnChance) / MinKilledToForceSpawnMother;
+
+		// Initialize trackers for spawn chances
+		motherSpawnChance = MotherStartSpawnChance;
+		fatherSpawnChance = FatherStartSpawnChance;
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -47,32 +87,54 @@ public class BullSpawner : MonoBehaviour
 		// Spawn if the timer has reached
 		if(timeTillNextBull <= 0)
 		{
-			spawnBull(BasicBull.TypeOfBull.BULL_BABY, Random.Range(0, 2) == 0);
+			// Calculate chance for this spawn
+			int chance = Random.Range(0, 100);
+
+			// Decide what to spawn
+			if (fatherSpawnChance > chance)
+			{
+				// Spawn
+				spawnBull (BasicBull.TypeOfBull.BULL_FATHER);
+				// Reset Spawn Chance
+				fatherSpawnChance = FatherStartSpawnChance;
+			}
+			else if (motherSpawnChance > chance)
+			{
+				// Spawn
+				spawnBull(BasicBull.TypeOfBull.BULL_MOTHER);
+				// Reset Spawn Chance
+				motherSpawnChance = MotherStartSpawnChance;
+				// Increase the spawn chances for specials
+				fatherSpawnChance += spawnIncrementFather * MotherForceSpawnWeight;
+			}
+			else
+			{
+				// Spawn
+				spawnBull(BasicBull.TypeOfBull.BULL_BABY);
+				// Increase the spawn chances for specials
+				fatherSpawnChance += spawnIncrementFather * BabyForceSpawnWeight;
+				motherSpawnChance += spawnIncrementMother * BabyForceSpawnWeight;
+			}
 		}
 	}
 
-	private void spawnBull(BasicBull.TypeOfBull bullType, bool spawnLeft)
+	private void spawnBull(BasicBull.TypeOfBull bullType)
 	{
 		Vector3 spawnPos;
 		BasicBull prevBull;
-		// Select the correct previous bull
-		if (spawnLeft)
+		bool spawnLeft;
+
+		// Select the correct previous bull and the position to spawn
+		if (Random.Range(0, 2) == 0)
 		{
+			spawnLeft = true;
 			prevBull = prevBullEachSide[0];
-		}
-		else
-		{
-			prevBull = prevBullEachSide[1];
-		}
-
-
-		// Determine the position to spawn
-		if (spawnLeft)
-		{
 			spawnPos = LeftSpawner.position;
 		}
 		else
 		{
+			spawnLeft = false;
+			prevBull = prevBullEachSide[1];
 			spawnPos = RightSpawner.position;
 		}
 
@@ -82,6 +144,12 @@ public class BullSpawner : MonoBehaviour
 		{
 			case BasicBull.TypeOfBull.BULL_BABY:
 				newBull = Instantiate(BabyBullPrefab, spawnPos, Quaternion.identity) as GameObject;
+				break;
+			case BasicBull.TypeOfBull.BULL_MOTHER:
+				newBull = Instantiate(MotherBullPrefab, spawnPos, Quaternion.identity) as GameObject;
+				break;
+			case BasicBull.TypeOfBull.BULL_FATHER:
+				newBull = Instantiate(FatherBullPrefab, spawnPos, Quaternion.identity) as GameObject;
 				break;
 			default:
 				newBull = Instantiate(BabyBullPrefab, spawnPos, Quaternion.identity) as GameObject;

@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\QTEManager.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundFile.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\SpriteColliderResizer.cs" />
      <Compile Include="Assets\Scripts\StatManager.cs" />
      <Compile Include="Assets\Scripts\TimeManager.cs" />
  <Reference Include="UnityEngine.UI">
@@ -64,6 +65,12 @@
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Cecil">
+ <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

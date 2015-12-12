@@ -36,6 +36,19 @@ public class StatManager : MonoSingleton<StatManager>
 	 */
 	public float TimeSinceStart { get { return timeSinceStart; } }
 
+	public int TotalEnemiesKilled
+	{
+		get 
+		{
+			int total = 0;
+			for (int i = 0; i < Enum.GetNames (typeof(BasicBull.TypeOfBull)).Length; ++i) 
+			{
+				total += enemiesKilled [i];
+			}
+			return total;
+		}
+	}
+
 	public int GetNumEnemiesKilled(BasicBull.TypeOfBull type)
 	{
 		return enemiesKilled[(int)type];
