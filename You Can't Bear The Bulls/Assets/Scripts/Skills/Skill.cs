@@ -72,6 +72,14 @@ public abstract class Skill : MonoBehaviour
 		}
 	}
 
+    public void EndPrematurely()
+    {
+        if (activated)
+        {
+            skillTimer = -1.0f;
+        }
+    }
+
 	// To Query the state of this Skill
 	public bool IsUnused { get { return (activated == false && skillTimer > 0.0f); } }
 	public bool IsUsing { get { return activated; } }

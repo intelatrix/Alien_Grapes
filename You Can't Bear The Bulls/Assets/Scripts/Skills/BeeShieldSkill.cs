@@ -3,26 +3,25 @@ using System.Collections;
 
 public class BeeShieldSkill : Skill 
 {
-	[Tooltip("The radius of the shield generated.")]
-	public float ShieldRadius = 10.0f;
+    SpriteRenderer visual;
 
 	protected override void start ()
 	{
         type = Type.BeeShield;
-	}
+        visual = GetComponent<SpriteRenderer>();
+    }
 
 	protected override void update ()
 	{
-
-	}
+    }
 
 	protected override void use()
 	{
-		
-	}
+        visual.enabled = true;
+    }
 
 	protected override void cleanUp ()
 	{
-		
-	}
+        visual.enabled = false;
+    }
 }
