@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class BasicBull : MonoBehaviour 
 {
+
+	public List<BasicBull> ThisBullList = null;
+	
 	public enum TypeOfBull
 	{
 		BULL_BABY,

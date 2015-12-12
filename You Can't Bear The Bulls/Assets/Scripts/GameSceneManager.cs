@@ -35,7 +35,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
     void Start()
     {
-  		MotherQTEManager.StartQTE(10);
+  		//MotherQTEManager.StartQTE(10);
     }
 
     void Update()
@@ -167,34 +167,29 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
     public void BearGetsHit(GameObject HittingBull)
     {
-		List<BasicBull> TempList = null;
-		if(HittingBull.GetComponent<BasicBull>().IfFacingRight)
-           	 TempList = ListOfBullLeft;
-        else
-            TempList = ListOfBullRight;
-
-        TempList.RemoveAt(0);
+		HittingBull.GetComponent<BasicBull>().ThisBullList.Remove(HittingBull.GetComponent<BasicBull>());
     	Destroy(HittingBull);
     }
 
     public void AddBullInsideList(BasicBull EnteringBull)
     {
         if (!EnteringBull.IfFacingRight)
+        {
+        	EnteringBull.ThisBullList = ListOfBullRight;
             ListOfBullRight.Add(EnteringBull);
+        }
         else
+        {
+			EnteringBull.ThisBullList = ListOfBullLeft;
             ListOfBullLeft.Add(EnteringBull);
+        }
+
+
     }
 
     public void BullGetPunched(BasicBull TargetBull)
     {
-		List<BasicBull> TempList = null;
-		if(TargetBull.IfFacingRight)
-           	 TempList = ListOfBullLeft;
-        else
-            TempList = ListOfBullRight;
-
-        TempList.RemoveAt(0);
-
+		TargetBull.ThisBullList.Remove(TargetBull);
         Destroy(TargetBull.gameObject);
     }
 }
