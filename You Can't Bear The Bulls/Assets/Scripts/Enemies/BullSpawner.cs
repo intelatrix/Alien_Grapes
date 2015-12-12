@@ -4,34 +4,46 @@ using System.Collections;
 public class BullSpawner : MonoBehaviour
 {
 	// Spawn Speed
+	[Tooltip("The minimum speed of a spawned bull.")]
 	public float MinSpeed = 3.0f;
+	[Tooltip("The maximum speed of a spawned bull.")]
 	public float MaxSpeed = 5.0f;
+	[Tooltip("The minimum distance between bulls that have to be adhered to.")]
 	public float MinDistBetweenBulls = 5.0f;
 
 	// Spawn Rate
 	[Tooltip("The minimum spawn rate. Is not affected by SpawnAmplitude.")]
-	public float MinSpawnRate;
+	public float MinSpawnRate = 0.5f;
 	[Tooltip("The maximum spawn rate. Is not affected by SpawnAmplitude.")]
-	public float MaxSpawnRate;
+	public float MaxSpawnRate = 2.0f;
 	[Tooltip("The range between the min and max spawn rate when auto generated based on game progress.")]
-	public float SpawnAmplitude;        // Controls
+	public float SpawnAmplitude = 1.5f;        // Controls
 
 	// Memory of Previous Bull
 	private BasicBull[] prevBullEachSide = new BasicBull[2];        // 0 - Left, 1 - Right
 
+	// Bulls Prefabs
+	[Tooltip("The prefab that is used to clone a baby bull for spawning.")]
 	public GameObject BabyBullPrefab;
-	float TimeTillNextBull = 0.0f;
-	public Transform LeftSpawner, RightSpawner;
+
+	// Spawn Points
+	[Tooltip("Position of the spawn point for bulls on the left.")]
+	public Transform LeftSpawner;
+	[Tooltip("Position of the spawn point for bulls on the right.")]
+	public Transform RightSpawner;
+
+	// Spawn Limiter
+	float timeTillNextBull = 0.0f;
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		transform.position = new Vector3(Player_Bear.Instance.transform.position.x, Player_Bear.Instance.transform.position.y, transform.position.z);
 
-		TimeTillNextBull -= TimeManager.Instance.GetGameDeltaTime();
+		timeTillNextBull -= TimeManager.Instance.GetGameDeltaTime();
 
 
-		if(TimeTillNextBull <= 0)
+		if(timeTillNextBull <= 0)
 		{
 			spawnBull(BasicBull.TypeOfBull.BULL_BABY, Random.Range(0, 2) == 0);
 		}
@@ -95,8 +107,8 @@ public class BullSpawner : MonoBehaviour
 		// Upon successful spawn, set the spawn timer
 		// -- Calculate the next spawn timer
 		float sinAngle = Mathf.Abs(StatManager.Instance.TimeSinceStart % (Mathf.PI * 2));
-		float minSpawnTime = Mathf.Clamp(MinSpawnRate + (SpawnAmplitude * Mathf.Sin(sinAngle)), MinSpawnRate, MaxSpawnRate);
-		TimeTillNextBull = Random.Range(minSpawnTime, MaxSpawnRate);
+		float minSpawnTime = Mathf.Clamp(MinSpawnRate + (SpawnAmplitude * Mathf.Sin(sinAngle) - StatManager.Instance.TimeSinceStart * 0.1f), MinSpawnRate, MaxSpawnRate);
+		timeTillNextBull = Random.Range(minSpawnTime, MaxSpawnRate);
 
 		// Store this bull for later
 		if (spawnLeft)
