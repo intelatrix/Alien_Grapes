@@ -18,9 +18,45 @@ public class QTEManager : MonoBehaviour
 
 	public QTEType ThisType;
 
+	public int QTEButtonPressed(GameSceneManager.ArrowKeysPressed PressedKey)
+	{
+		if(ListOfQTE[0].TypeOfQTE == PressedKey)
+		{
+			Destroy(ListOfQTE[0].gameObject);
+			ListOfQTE.RemoveAt(0);
+
+			if(ListOfQTE.Count == 0)
+			{
+				return 1;
+			}
+			else
+			{
+				foreach(QTEQue Que in ListOfQTE)
+				{
+					Que.transform.Translate(new Vector3(-ConstDistanceBetweenQues,0,0));
+				}	
+				return 0;
+			}
+		}
+
+		return -1;
+	}
+
 	public void StartQTE(int NumberOfKeys)
 	{
 		StartCoroutine(GenerateQTE(NumberOfKeys));
+	}
+
+	public void ShowKey()
+	{
+		QueArea.SetActive(true);
+		LeftMost.SetActive(true);
+	}
+
+	public void HideKey()
+	{
+		QueArea.SetActive(false);
+		LeftMost.SetActive(false);
 	}
 
 	void NewKey()
@@ -32,12 +68,15 @@ public class QTEManager : MonoBehaviour
 
 					Vector3 DistanceFromLeft = new Vector3(LeftMost.transform.position.x + ListOfQTE.Count *ConstDistanceBetweenQues + ConstDistanceFromLeft, LeftMost.transform.position.y, 0);
 
-					GameObject NewQTE = Instantiate(QTEPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+					GameObject NewQTE = Instantiate(QTEPrefab, DistanceFromLeft, Quaternion.identity) as GameObject;
+
 					QTEQue NewQTEQue = NewQTE.GetComponent<QTEQue>();
 					ListOfQTE.Add(NewQTEQue);
 
-					NewQTE.transform.parent = QueArea.transform;
-					  
+					//NewQTE.transform.parent = QueArea.transform;
+					NewQTE.transform.SetParent(QueArea.transform);
+					NewQTE.transform.localScale = new Vector3(1,1,1);
+
 					switch(RandomNumber)
 					{
 						case 0:

@@ -16,8 +16,14 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 {
     BasicBull TargetedBull = null;
     BearState CurrentBearState = BearState.BEAR_NONE;
+    BearSubMomEnum CurrentMomBearState = BearSubMomEnum.BEAR_MOM_MOVE_TOWARDS;
+    public BasicBull targetedBull {get{return TargetedBull;}}
+
     public float ConstLerpTime = 0.5f;
+    public float ConstLerpMomTime = 0.2f;
     float LerpTimeLeft = 0;
+	public float lerpTimeLeft { get { return LerpTimeLeft; } }
+
 
     public int ConstMaxCharge = 100;
     int CurrentCharge = 0;
@@ -41,6 +47,12 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		BEAR_ATTACK_MOTHER,
 		BEAR_ATTACK_FATHER,
         BEAR_MISS
+    }
+
+    public enum BearSubMomEnum
+    {
+    	BEAR_MOM_MOVE_TOWARDS,
+    	BEAR_MOM_ATTACK
     }
 
     // Use this for initialization
@@ -71,6 +83,12 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 			case BearState.BEAR_MISS:
 				BearMissUpdate();
 				break;
+			case BearState.BEAR_ATTACK_MOTHER:
+				BearMotherUpdate();
+				break;
+		case BearState.BEAR_ATTACK_FATHER:
+				BearFatherUpdate();
+				break;
         }
     }
 
@@ -93,7 +111,42 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	}
     }
 
+	void BearMotherUpdate()
+	{
+		switch(CurrentMomBearState)
+		{
+			case BearSubMomEnum.BEAR_MOM_MOVE_TOWARDS:
 
+				LerpTimeLeft += TimeManager.Instance.GetGameDeltaTime();
+				Vector3 NewTargetPosition;
+
+		    	if(TargetedBull.IfFacingRight)
+					NewTargetPosition = new Vector3(TargetedBull.transform.position.x,transform.position.y,0) + new Vector3(ConstAwayFrom,0,0);
+				else
+					NewTargetPosition = new Vector3(TargetedBull.transform.position.x,transform.position.y,0) + new Vector3(-ConstAwayFrom,0,0);;
+				 
+				transform.position = Vector3.Lerp(new Vector3(transform.position.x,transform.position.y,0), NewTargetPosition, LerpTimeLeft/ConstLerpMomTime);
+
+				if(transform.position == NewTargetPosition)
+	    		{
+	    			CurrentMomBearState = BearSubMomEnum.BEAR_MOM_ATTACK;
+	    			GameSceneManager.Instance.ReachedMom();
+	    		}
+				break;
+			case BearSubMomEnum.BEAR_MOM_ATTACK:
+				break;
+		}
+	}
+
+	public void FinishMom()
+	{
+		CurrentBearState = BearState.BEAR_NONE;
+	}
+
+	void BearFatherUpdate()
+	{
+		
+	}
 
     void BearMissUpdate()
     {
@@ -117,6 +170,16 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	TargetedBull = AttackThisBull;
     	CurrentBearState = BearState.BEAR_ATTACK_BABY;
     	LerpTimeLeft = 0;
+    }
+
+
+    public void SetBearAttackMother(BasicBull AttackThisBull)
+    {
+    	TargetedBull = AttackThisBull;
+    	CurrentBearState = BearState.BEAR_ATTACK_MOTHER;
+		CurrentMomBearState = BearSubMomEnum.BEAR_MOM_MOVE_TOWARDS;
+    	LerpTimeLeft = 0;
+
     }
 
 //	public void StopMissing()

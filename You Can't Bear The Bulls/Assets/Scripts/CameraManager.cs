@@ -11,7 +11,7 @@ public class CameraManager : MonoSingleton<CameraManager> {
 
 		float XPosition = Camera.main.transform.position.x;
 
-		float LeftX, RightX;
+		float LeftX;
 
 		LeftX = XPosition - 9.6f;
 
@@ -19,14 +19,20 @@ public class CameraManager : MonoSingleton<CameraManager> {
 		int TimesToMoveLeft = Mathf.FloorToInt(LeftX/19.2f);
 
 
-		Background1.transform.position = new Vector3(TimesToMove*-19.2f,0,0);
+		Background1.transform.position = new Vector3(TimesToMove*19.2f,0,0);
 		if(TimesToMove == TimesToMoveLeft)
 		{
-			Background2.transform.position = new Vector3((TimesToMove-1)*-19.2f,0,0);
+			if(XPosition < 0)
+				Background2.transform.position = new Vector3((TimesToMove+1)*19.2f,0,0);
+			else
+				Background2.transform.position = new Vector3((TimesToMove-1)*19.2f,0,0);
 		}
 		else
 		{
-			Background2.transform.position = new Vector3((TimesToMove)*-19.2f,0,0);
+			if(XPosition < 0)
+				Background2.transform.position = new Vector3((TimesToMove-1)*19.2f,0,0);
+			else
+				Background2.transform.position = new Vector3((TimesToMove-1)*19.2f,0,0);
 		}
 
 	}
