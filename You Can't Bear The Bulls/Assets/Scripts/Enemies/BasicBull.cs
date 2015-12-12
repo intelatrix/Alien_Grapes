@@ -15,6 +15,7 @@ public class BasicBull : MonoBehaviour
 		bullType = type;
 		transform.position = spawnPos;
 		movementSpeed = moveSpeed;
+		ifFacingRight = faceRight;
 	}
 
 	public TypeOfBull bullType;
