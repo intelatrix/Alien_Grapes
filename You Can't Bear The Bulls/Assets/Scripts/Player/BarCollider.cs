@@ -9,7 +9,12 @@ public class BarCollider : MonoBehaviour {
     	{
 	        Debug.Log("Bull Enter");   
 	        BasicBull EnteringBull = collision.GetComponent<BasicBull>();
-	        GameSceneManager.Instance.AddBullInsideList(EnteringBull);
+
+	        if(!EnteringBull.BullEntered)
+	        {
+	        	EnteringBull.BullEntered = true;
+	        	GameSceneManager.Instance.AddBullInsideList(EnteringBull);
+	        }
         }
     }
 }

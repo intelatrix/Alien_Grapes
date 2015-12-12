@@ -44,4 +44,6 @@ public class BasicBull : MonoBehaviour
 	public TypeOfBull BullType { get { return bullType; } }
 	public bool IfFacingRight { get { return ifFacingRight; } }
 	public float MovementSpeed { get { return movementSpeed; } }
+
+	public bool BullEntered = false;
 }

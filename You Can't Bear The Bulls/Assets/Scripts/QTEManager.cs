@@ -7,6 +7,8 @@ public class QTEManager : MonoBehaviour
 	List<QTEQue> ListOfQTE = new List<QTEQue>();
 	public GameObject QTEPrefab;
 
+	public GameObject QTEArea, LeftMost;
+
 	public enum QTEType
 	{
 		QTE_MOTHER,
