@@ -53,6 +53,8 @@
      <Compile Include="Assets\Scripts\MonoSingleton.cs" />
      <Compile Include="Assets\Scripts\Player\BarCollider.cs" />
      <Compile Include="Assets\Scripts\Player\Player_Bear.cs" />
+     <Compile Include="Assets\Scripts\QTE\QTEQue.cs" />
+     <Compile Include="Assets\Scripts\QTEManager.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundFile.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundManager.cs" />
      <Compile Include="Assets\Scripts\StatManager.cs" />

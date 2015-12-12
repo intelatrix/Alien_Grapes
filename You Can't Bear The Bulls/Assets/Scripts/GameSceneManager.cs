@@ -8,9 +8,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     List<BasicBull> ListOfBullRight = new List<BasicBull>();
     List<BasicBull> ListofAllBulls = new List<BasicBull>();
 
+    public QTEManager MotherQTEManager;
+
     bool IfMiss = false;
     public float ConstMissTime = 1.0f;
-  
+
     float MissTimeLeft = 0f;
 
     enum GameState
@@ -20,11 +22,20 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     	GAME_FATHER_QTE
     };
 
+    public enum ArrowKeysPressed
+    {
+        KEYS_NONE,
+        KEYS_LEFT,
+        KEYS_RIGHT,
+        KEYS_UP,
+        KEYS_DOWN
+    }
+
     GameState CurrentState = GameState.GAME_NORMAL;
 
     void Start()
     {
-  
+  		MotherQTEManager.StartQTE(10);
     }
 
     void Update()
@@ -95,7 +106,20 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
     void MotherGameUpdate()
     {
-	
+		ArrowKeysPressed CurrentKeyPressed = NormalControlsUpdate();
+	        List<BasicBull> TempList = null;
+	        bool? IfPressRight = null;
+	        switch (CurrentKeyPressed)
+	        {
+	            case ArrowKeysPressed.KEYS_LEFT:
+	                TempList = ListOfBullLeft;
+	                IfPressRight = false;
+	                break;
+	            case ArrowKeysPressed.KEYS_RIGHT:
+	                TempList = ListOfBullRight;
+	                IfPressRight = true;
+	                break;
+	        }
     }
 
     ArrowKeysPressed MotherControlUpdate()
@@ -128,15 +152,6 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     			TempBabyBull.GetHit();
     			break;
     	}
-    }
-
-    enum ArrowKeysPressed
-    {
-        KEYS_NONE,
-        KEYS_LEFT,
-        KEYS_RIGHT,
-        KEYS_UP,
-        KEYS_DOWN
     }
 
     ArrowKeysPressed NormalControlsUpdate()

@@ -14,6 +14,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     int CurrentCharge = 0;
 
 	public float ConstAwayFrom = 2;
+	public float MissDistance = 0.5f;
 
     Vector3 MissTowards;
 
@@ -31,7 +32,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     // Use this for initialization
     void Start()
     {
-		ChargeBar.fillAmount = 0.5f;
+		//ChargeBar.fillAmount = 0.5f;
     }
 
     // Update is called once per frame
