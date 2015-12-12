@@ -8,7 +8,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     List<BasicBull> ListOfBullRight = new List<BasicBull>();
     List<BasicBull> ListofAllBulls = new List<BasicBull>();
 
-    public QTEManager MotherQTEManager;
+    public QTEManager MotherQTEManager, FatherQTEManager;
 
     bool IfMiss = false;
     public float ConstMissTime = 1.0f;
@@ -17,6 +17,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     public SpriteRenderer FirstBlackBackground, SecondBlackBackground;
 
     float MissTimeLeft = 0f;
+    float TimeLeftForQTE = 0f;
 
 	int MotherQTENumber = 3;
 	int FatherQTENumber = 5;
@@ -32,7 +33,16 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     {
     	SUB_MOM_MOVE_TOWARDS,
     	SUB_MOM_REACHED,
-    	SUB_MOM_FINISHING
+    	SUB_MOM_FINISHING,
+    	SUB_MOM_GET_HIT
+    };
+
+	enum SubDadGameState
+    {
+    	SUB_DAD_MOVE_TOWARDS,
+    	SUB_DAD_REACHED,
+    	SUB_DAD_FINISHING,
+    	SUB_DAD_GET_HIT
     };
 
     public enum ArrowKeysPressed
@@ -46,10 +56,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
     GameState CurrentState = GameState.GAME_NORMAL;
     SubMomGameState SubMomCurrentState = SubMomGameState.SUB_MOM_MOVE_TOWARDS;
-
+	SubDadGameState SubDadCurrentState = SubDadGameState.SUB_DAD_MOVE_TOWARDS;
     void Start()
     {
 		MotherQTEManager.StartQTE(MotherQTENumber);
+		FatherQTEManager.StartQTE(FatherQTENumber);
     }
 
     void Update()
@@ -68,6 +79,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
         	MotherGameUpdate();
         	break;
         case GameState.GAME_FATHER_QTE:
+        	FatherGameUpdate();
        		break;
         }
     }
@@ -125,46 +137,113 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 		switch(SubMomCurrentState)
     	{
     		case SubMomGameState.SUB_MOM_MOVE_TOWARDS:
-    			float CurrentAlpha = (Player_Bear.Instance.lerpTimeLeft/Player_Bear.Instance.ConstLerpMomTime) * ConstMaximumBlackAlpha;
+    			float CurrentAlpha = (Player_Bear.Instance.lerpTimeLeft/Player_Bear.Instance.ConstLerpDadTime) * ConstMaximumBlackAlpha;
 
     			FirstBlackBackground.color = new Color(0,0,0, CurrentAlpha);
 				SecondBlackBackground.color = new Color(0,0,0, CurrentAlpha);
 
     			break;
     		case SubMomGameState.SUB_MOM_REACHED:
-				ArrowKeysPressed CurrentKeyPressed = NormalControlsUpdate();
+				ArrowKeysPressed CurrentKeyPressed = MotherControlUpdate();
 				int IfLastKey = 0;  
 				if(CurrentKeyPressed != ArrowKeysPressed.KEYS_NONE)
 					IfLastKey = MotherQTEManager.QTEButtonPressed(CurrentKeyPressed);
 
+				TimeLeftForQTE -= TimeManager.Instance.GetGameDeltaTime();
+
 				if(IfLastKey == 1)
 				{
-					SubMomCurrentState = SubMomGameState.SUB_MOM_FINISHING;
+					ResetMomQTE();
+
+					Player_Bear.Instance.FinishMom();
+					BullGetPunched(Player_Bear.Instance.targetedBull);
+
+					CurrentState = GameState.GAME_NORMAL;
 				}
-				else if(IfLastKey == -1)
+				else if(IfLastKey == -1 ||  TimeLeftForQTE < 0)
 				{
-					//BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
+					ResetMomQTE();
+					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
+					CurrentState = GameState.GAME_NORMAL;
 				}
 
     			break;
     		case SubMomGameState.SUB_MOM_FINISHING:
-				FirstBlackBackground.color = new Color(0,0,0, 0);
-				SecondBlackBackground.color = new Color(0,0,0,0);
-
-				FirstBlackBackground.enabled = false;
-				SecondBlackBackground.enabled = false;
-
-				MotherQTENumber += 2;
-
-				MotherQTEManager.HideKey();
-				MotherQTEManager.StartQTE(MotherQTENumber);
-
-				Player_Bear.Instance.FinishMom();
-				BullGetPunched(Player_Bear.Instance.targetedBull);
-
-				CurrentState = GameState.GAME_NORMAL;
+				
     			break;
+
     	}
+    }
+
+	void FatherGameUpdate()
+    {
+		switch(SubDadCurrentState)
+    	{
+    		case SubDadGameState.SUB_DAD_MOVE_TOWARDS:
+    			float CurrentAlpha = (Player_Bear.Instance.lerpTimeLeft/Player_Bear.Instance.ConstLerpDadTime) * ConstMaximumBlackAlpha;
+
+    			FirstBlackBackground.color = new Color(0,0,0, CurrentAlpha);
+				SecondBlackBackground.color = new Color(0,0,0, CurrentAlpha);
+
+    			break;
+    		case SubDadGameState.SUB_DAD_REACHED:
+				ArrowKeysPressed CurrentKeyPressed = FatherControlUpdate();
+				int IfLastKey = 0;  
+				if(CurrentKeyPressed != ArrowKeysPressed.KEYS_NONE)
+					IfLastKey = FatherQTEManager.QTEButtonPressed(CurrentKeyPressed);
+
+				TimeLeftForQTE -= TimeManager.Instance.GetGameDeltaTime();
+
+				if(IfLastKey == 1)
+				{
+					ResetDadQTE();
+
+					Player_Bear.Instance.FinishDad();
+					BullGetPunched(Player_Bear.Instance.targetedBull);
+
+					CurrentState = GameState.GAME_NORMAL;
+				}
+				else if(IfLastKey == -1 ||  TimeLeftForQTE < 0)
+				{
+					ResetDadQTE();
+					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
+					CurrentState = GameState.GAME_NORMAL;
+				}
+
+    			break;
+    		case SubDadGameState.SUB_DAD_FINISHING:
+				
+    			break;
+
+    	}
+    }
+
+    void ResetMomQTE()
+    {
+			FirstBlackBackground.color = new Color(0,0,0, 0);
+			SecondBlackBackground.color = new Color(0,0,0,0);
+
+			FirstBlackBackground.enabled = false;
+			SecondBlackBackground.enabled = false;
+
+			MotherQTENumber += 1;
+
+			MotherQTEManager.HideKey();
+			MotherQTEManager.StartQTE(MotherQTENumber);
+    }
+
+	void ResetDadQTE()
+    {
+			FirstBlackBackground.color = new Color(0,0,0, 0);
+			SecondBlackBackground.color = new Color(0,0,0,0);
+
+			FirstBlackBackground.enabled = false;
+			SecondBlackBackground.enabled = false;
+
+			FatherQTENumber += 1;
+
+			FatherQTEManager.HideKey();
+			FatherQTEManager.StartQTE(FatherQTENumber);
     }
 
     ArrowKeysPressed MotherControlUpdate()
@@ -179,10 +258,20 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
             return ArrowKeysPressed.KEYS_NONE;
     }
 
+
+
     public void ReachedMom()
     {
+		TimeLeftForQTE = 3.0f + (0.5f * MotherQTEManager.ListLength);
 		SubMomCurrentState = SubMomGameState.SUB_MOM_REACHED;
 		MotherQTEManager.ShowKey();
+    }
+
+	public void ReachedDad()
+    {
+		TimeLeftForQTE = 3.0f + (0.6f * FatherQTEManager.ListLength);
+		SubDadCurrentState = SubDadGameState.SUB_DAD_REACHED;
+		FatherQTEManager.ShowKey();
     }
 
 	ArrowKeysPressed FatherControlUpdate()
@@ -219,6 +308,19 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
     			TempBull.GetHit();
     			CurrentState = GameState.GAME_MOTHER_QTE;
 				SubMomCurrentState = SubMomGameState.SUB_MOM_MOVE_TOWARDS;
+
+				FirstBlackBackground.color = new Color(0,0,0, 0);
+				SecondBlackBackground.color = new Color(0,0,0,0);
+
+				FirstBlackBackground.enabled = true;
+				SecondBlackBackground.enabled = true;
+				break;
+
+		case BasicBull.TypeOfBull.BULL_FATHER:
+    			Player_Bear.Instance.SetBearAttackFather(TempBull);
+    			TempBull.GetHit();
+    			CurrentState = GameState.GAME_FATHER_QTE;
+				SubDadCurrentState = SubDadGameState.SUB_DAD_MOVE_TOWARDS;
 
 				FirstBlackBackground.color = new Color(0,0,0, 0);
 				SecondBlackBackground.color = new Color(0,0,0,0);
