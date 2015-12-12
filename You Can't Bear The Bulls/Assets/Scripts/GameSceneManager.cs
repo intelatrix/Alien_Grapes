@@ -88,9 +88,12 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 		        }
 		        else
 		        {
-	        		Player_Bear.Instance.SetBearMiss((bool)IfPressRight);
-					MissTimeLeft =  ConstMissTime;
-					IfMiss = true;
+		        	if(Player_Bear.Instance.GetBearState() == Player_Bear.BearState.BEAR_NONE)
+		        	{
+		        		Player_Bear.Instance.SetBearMiss((bool)IfPressRight);
+						MissTimeLeft =  ConstMissTime;
+						IfMiss = true;
+					}
 	       		}
 	        }
         }

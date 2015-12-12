@@ -1,10 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System;
+
+[Serializable]
+	public struct NamedImage 
+	{
+		public string name;
+		public Sprite image;
+	}
+
 
 public class Player_Bear : MonoSingleton<Player_Bear>
 {
-
     BasicBull TargetedBull = null;
     BearState CurrentBearState = BearState.BEAR_NONE;
     public float ConstLerpTime = 0.5f;
@@ -16,11 +25,16 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	public float ConstAwayFrom = 2;
 	public float MissDistance = 0.5f;
 
+	public SpriteRenderer BearSprite;
+	public List<NamedImage> ListOfSprite;
+	Dictionary<string, Sprite> DictionaryOfSprite = new Dictionary<string, Sprite>();
+
+
     Vector3 MissTowards;
 
     public Image ChargeBar;
 
-    enum BearState
+    public enum BearState
     {
         BEAR_NONE,
         BEAR_ATTACK_BABY,
@@ -33,6 +47,12 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     void Start()
     {
 		//ChargeBar.fillAmount = 0.5f;
+		foreach(NamedImage NewSprite in ListOfSprite)
+		{
+			DictionaryOfSprite.Add(NewSprite.name, NewSprite.image);
+		}
+
+		ListOfSprite = null;
     }
 
     // Update is called once per frame
@@ -115,6 +135,11 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		LerpTimeLeft = 0;
     }
 
+    public BearState GetBearState()
+    {
+    	return CurrentBearState;
+    }
+
 	void OnTriggerEnter2D(Collider2D collision)
     {
     	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_MISS || CurrentBearState == BearState.BEAR_NONE))
@@ -122,4 +147,6 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	        GameSceneManager.Instance.BearGetsHit(collision.gameObject);
         }
     }
+
+
 }

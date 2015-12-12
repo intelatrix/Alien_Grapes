@@ -22,7 +22,7 @@ public class SpriteColliderResizer : MonoBehaviour
 	private void analyzeTexture(Texture2D tex, bool imageCentered)
 	{
 		// Calculate the vertical mid point
-		int vertMid = tex.height * 0.5;
+		int vertMid = (int)(tex.height * 0.5);
 
 		// Track the left and rights
 		int left = 0;

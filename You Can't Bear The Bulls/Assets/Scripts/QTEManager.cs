@@ -7,7 +7,8 @@ public class QTEManager : MonoBehaviour
 	List<QTEQue> ListOfQTE = new List<QTEQue>();
 	public GameObject QTEPrefab;
 
-	public GameObject QTEArea, LeftMost;
+	public GameObject QueArea, LeftMost;
+	public float ConstDistanceBetweenQues, ConstDistanceFromLeft; 
 
 	public enum QTEType
 	{
@@ -28,9 +29,15 @@ public class QTEManager : MonoBehaviour
 			{
 				case QTEType.QTE_MOTHER:
 					int RandomNumber = Random.Range(0,2);
+
+					Vector3 DistanceFromLeft = new Vector3(LeftMost.transform.position.x + ListOfQTE.Count *ConstDistanceBetweenQues + ConstDistanceFromLeft, LeftMost.transform.position.y, 0);
+
 					GameObject NewQTE = Instantiate(QTEPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 					QTEQue NewQTEQue = NewQTE.GetComponent<QTEQue>();
 					ListOfQTE.Add(NewQTEQue);
+
+					NewQTE.transform.parent = QueArea.transform;
+					  
 					switch(RandomNumber)
 					{
 						case 0:
