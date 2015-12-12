@@ -60,7 +60,6 @@ public abstract class Skill : MonoBehaviour
 	{
 		if (HasExpired)
 		{
-			skillTimer = Duration;
 			activated = false;
 
 			// Call derived clean up function

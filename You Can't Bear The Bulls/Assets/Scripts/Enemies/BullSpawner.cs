@@ -23,7 +23,7 @@ public class BullSpawner : MonoBehaviour
 	[Tooltip("Chance for MotherBull to spawn at the start.")]
 	public float MotherStartSpawnChance = 10.0f;
 	[Tooltip("Number of kill points needed before the Mother spawn chance is 100%.")]
-	public int MinKilledToForceSpawnMother = 50;
+	public int MinKilledToForceSpawnMother = 25;
 	[Tooltip("Chance for FatherBull to spawn at the start.")]
 	public float FatherStartSpawnChance = 1.0f;
 	[Tooltip("Number of kill points needed before the Father spawn chance is 100%.")]

@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-public class SkillManager : MonoBehaviour 
+public class SkillManager : MonoSingleton<SkillManager> 
 {
 	// To load PreFab skills
 	public GameObject SlowDownSkillPrefab;
@@ -30,12 +30,13 @@ public class SkillManager : MonoBehaviour
 		// Get a random skill type
 		Skill.Type skillType = (Skill.Type)UnityEngine.Random.Range (0, Enum.GetNames (typeof(Skill.Type)).Length);
 
+        // Check if it is a skill
 		Skill skill = SkillList [(int)skillType].GetComponent<Skill> ();
 
 		// Calculate if probabilities will let us spawn it
 		if (skill != null)
 		{
-			return Instantiate (SkillList [(int)skillType]);
+            return Instantiate (SkillList [(int)skillType]);
 		}
 
 		return null;
