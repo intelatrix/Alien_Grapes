@@ -8,7 +8,7 @@ public class BeeShieldSkill : Skill
 
 	protected override void start ()
 	{
-		
+        type = Type.BeeShield;
 	}
 
 	protected override void update ()

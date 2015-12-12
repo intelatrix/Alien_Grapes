@@ -8,9 +8,12 @@ public abstract class Skill : MonoBehaviour
 	public float Duration;
 	[Tooltip("The chance for this skill to drop.")]
 	public float DropChance;
+    [Tooltip("The sprite of this skill's icon.")]
+    public Sprite Icon;
 
 	private bool activated = false;
 	protected float skillTimer = 0.0f;
+    protected Type type;
 
 	public enum Type
 	{
@@ -32,7 +35,7 @@ public abstract class Skill : MonoBehaviour
 	{
 		if (activated)
 		{
-			skillTimer -= TimeManager.Instance.GetGameDeltaTime ();
+			skillTimer -= TimeManager.Instance.GetNormalTime();
 
 			// If the skill has expired
 			if (skillTimer < 0.0f)
@@ -64,6 +67,8 @@ public abstract class Skill : MonoBehaviour
 
 			// Call derived clean up function
 			cleanUp ();
+
+            SkillManager.Instance.ResetSkillIcon();
 		}
 	}
 
