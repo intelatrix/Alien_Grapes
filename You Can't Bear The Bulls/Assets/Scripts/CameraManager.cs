@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraManager : MonoSingleton<CameraManager> 
 {
-
 	public GameObject Background1, Background2;
 
 	private float camViewHeight;
