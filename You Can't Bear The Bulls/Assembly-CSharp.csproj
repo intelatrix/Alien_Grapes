@@ -57,6 +57,10 @@
      <Compile Include="Assets\Scripts\Player\Player_Bear.cs" />
      <Compile Include="Assets\Scripts\QTE\QTEQue.cs" />
      <Compile Include="Assets\Scripts\QTEManager.cs" />
+     <Compile Include="Assets\Scripts\Skills\BeeShieldSkill.cs" />
+     <Compile Include="Assets\Scripts\Skills\Skill.cs" />
+     <Compile Include="Assets\Scripts\Skills\SkillManager.cs" />
+     <Compile Include="Assets\Scripts\Skills\SlowDownSkill.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundFile.cs" />
      <Compile Include="Assets\Scripts\Sounds\SoundManager.cs" />
      <Compile Include="Assets\Scripts\SpriteColliderResizer.cs" />
