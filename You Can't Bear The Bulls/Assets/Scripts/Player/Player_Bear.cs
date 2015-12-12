@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System;
 
 [Serializable]
-	public struct NamedImage 
-	{
-		public string name;
-		public Sprite image;
-	}
+public struct NamedImage 
+{
+	public string name;
+	public Sprite image;
+}
 
 
 public class Player_Bear : MonoSingleton<Player_Bear>
@@ -31,10 +31,13 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	public float ConstAwayFrom = 2;
 	public float MissDistance = 0.5f;
 
+	// Textures/Sprites
 	public SpriteRenderer BearSprite;
 	public List<NamedImage> ListOfSprite;
 	Dictionary<string, Sprite> DictionaryOfSprite = new Dictionary<string, Sprite>();
 
+	// Skills
+	private Skill playerSkill = null;
 
     Vector3 MissTowards;
 
@@ -211,5 +214,16 @@ public class Player_Bear : MonoSingleton<Player_Bear>
         }
     }
 
+	void UseSkill()
+	{
+		if (playerSkill.IsUnused)
+		{
+			playerSkill.Use ();
+		}
+	}
 
+	void SetSkill(Skill skill)
+	{
+		playerSkill = skill;
+	}
 }

@@ -5,10 +5,11 @@ using System.Collections;
 public class SkillManager : MonoBehaviour 
 {
 	// To load PreFab skills
-	public Skill SlowDownSkillPrefab;
-	public Skill BeeShieldSkillPrefab;
+	public GameObject SlowDownSkillPrefab;
+	public GameObject BeeShieldSkillPrefab;
 
-	private Skill[] SkillList = new Skill[Enum.GetNames (typeof(Skill.Type)).Length];
+	// List to easily access prefab Skills
+	private GameObject[] SkillList = new GameObject[Enum.GetNames (typeof(Skill.Type)).Length];
 
 	// Use this for initialization
 	void Start () 
@@ -24,15 +25,17 @@ public class SkillManager : MonoBehaviour
 	
 	}
 
-	public Skill SpawnRandomSkill()
+	public GameObject SpawnRandomSkill()
 	{
 		// Get a random skill type
 		Skill.Type skillType = (Skill.Type)UnityEngine.Random.Range (0, Enum.GetNames (typeof(Skill.Type)).Length);
 
+		Skill skill = SkillList [(int)skillType].GetComponent<Skill> ();
+
 		// Calculate if probabilities will let us spawn it
-		if (UnityEngine.Random.Range (0, 99) < SkillList [(int)skillType].DropChance)
+		if (skill != null)
 		{
-			return SkillList[(int)skillType].Clone();
+			return Instantiate (SkillList [(int)skillType]);
 		}
 
 		return null;
