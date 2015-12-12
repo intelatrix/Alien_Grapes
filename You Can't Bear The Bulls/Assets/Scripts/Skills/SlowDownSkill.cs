@@ -8,7 +8,7 @@ public class SlowDownSkill : Skill
 
 	protected override void start ()
 	{
-		
+        type = Type.SlowDown;
 	}
 
 	protected override void update ()
