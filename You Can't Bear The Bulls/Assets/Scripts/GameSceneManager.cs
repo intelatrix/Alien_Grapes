@@ -274,7 +274,6 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
 	public void BullGetPunched(BasicBull TargetBull)
 	{
-		TargetBull.ThisBullList.Remove(TargetBull);
-		Destroy(TargetBull.gameObject);
+        TargetBull.StartKillSequence();
 	}
 }
