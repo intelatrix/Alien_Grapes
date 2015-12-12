@@ -38,11 +38,13 @@ public class BullSpawner : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		// Ensure that the spawner and it's children spawn points are always centered around the player
 		transform.position = new Vector3(Player_Bear.Instance.transform.position.x, Player_Bear.Instance.transform.position.y, transform.position.z);
 
+		// Update the spawn timer
 		timeTillNextBull -= TimeManager.Instance.GetGameDeltaTime();
 
-
+		// Spawn if the timer has reached
 		if(timeTillNextBull <= 0)
 		{
 			spawnBull(BasicBull.TypeOfBull.BULL_BABY, Random.Range(0, 2) == 0);
