@@ -13,7 +13,7 @@ public class MainMenuController : MonoBehaviour
 
 	public void StartGame()
 	{
-		EditorSceneManager.LoadScene ("NewScene");
+		EditorSceneManager.LoadScene ("GameScene");
 	}
 
     public void OpenCredits()

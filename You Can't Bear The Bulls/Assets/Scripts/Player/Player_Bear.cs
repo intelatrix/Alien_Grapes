@@ -304,11 +304,13 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	{
 			AttackType = 1;
 			BearSprite.sprite = DictionaryOfSprite["Bear_Slap_1"];
+			SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLAP_1);
     	}
     	else
     	{
     		AttackType = 0;
 			BearSprite.sprite = DictionaryOfSprite["Bear_Slap_2"];
+			SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLAP_2);
     	}
     }
 
