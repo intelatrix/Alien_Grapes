@@ -152,7 +152,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 				break;
 			case SubMomGameState.SUB_MOM_REACHED:
 				ArrowKeysPressed CurrentKeyPressed = MotherControlUpdate();
-				int IfLastKey = 0;  
+				int IfLastKey = 2;  
 				if(CurrentKeyPressed != ArrowKeysPressed.KEYS_NONE)
 					IfLastKey = MotherQTEManager.QTEButtonPressed(CurrentKeyPressed);
 
@@ -172,6 +172,10 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 					ResetMomQTE();
 					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
 					CurrentState = GameState.GAME_NORMAL;
+				}
+				else if(IfLastKey == 0)
+				{
+					Player_Bear.Instance.BearAttack();
 				}
 
 				break;
@@ -195,7 +199,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 				break;
 			case SubDadGameState.SUB_DAD_REACHED:
 				ArrowKeysPressed CurrentKeyPressed = FatherControlUpdate();
-				int IfLastKey = 0;  
+				int IfLastKey = 2;  
 				if(CurrentKeyPressed != ArrowKeysPressed.KEYS_NONE)
 					IfLastKey = FatherQTEManager.QTEButtonPressed(CurrentKeyPressed);
 
@@ -215,6 +219,10 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 					ResetDadQTE();
 					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
 					CurrentState = GameState.GAME_NORMAL;
+				}
+				else if(IfLastKey == 0)
+				{
+					Player_Bear.Instance.BearAttack();
 				}
 
 				break;

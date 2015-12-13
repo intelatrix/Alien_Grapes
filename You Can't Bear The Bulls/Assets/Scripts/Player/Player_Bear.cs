@@ -26,6 +26,9 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     float LerpTimeLeft = 0;
 	public float lerpTimeLeft { get { return LerpTimeLeft; } }
 
+	public float ToRestMaxTime;
+	float RemainingRestTime = 0;
+
 	public float ConstAwayFrom = 2;
 	public float MissDistance = 0.5f;
 
@@ -47,6 +50,8 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     int CurrentCharge = 0;
 
     int Health = 3;
+
+    int AttackType = 0;
 
     public enum BearState
     {
@@ -72,7 +77,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     // Use this for initialization
     void Start()
     {
-	
+		
 		foreach(NamedImage NewSprite in ListOfSprite)
 		{
 			DictionaryOfSprite.Add(NewSprite.name, NewSprite.image);
@@ -110,7 +115,22 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		case BearState.BEAR_ATTACK_FATHER:
 				BearFatherUpdate();
 				break;
+			case BearState.BEAR_NONE:
+				BearNoneUpdate();
+				break;
         }
+    }
+
+	void BearNoneUpdate()
+    {
+   	 	if(RemainingRestTime > 0)
+    	{
+    		RemainingRestTime -= TimeManager.Instance.GetGameDeltaTime();
+    		if(RemainingRestTime <= 0)
+    		{
+				BearSprite.sprite = DictionaryOfSprite["BearFaceRight"];
+    		}
+    	}
     }
 
 	void BearAttackBabyUpdate()
@@ -225,6 +245,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	TargetedBull = AttackThisBull;
     	CurrentBearState = BearState.BEAR_ATTACK_BABY;
     	LerpTimeLeft = 0;
+		BearAttack();
     }
 
 
@@ -234,7 +255,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	CurrentBearState = BearState.BEAR_ATTACK_MOTHER;
 		CurrentMomBearState = BearSubMomEnum.BEAR_MOM_MOVE_TOWARDS;
     	LerpTimeLeft = 0;
-
+		BearAttack();
     }
 
 	public void SetBearAttackFather(BasicBull AttackThisBull)
@@ -243,7 +264,24 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	CurrentBearState = BearState.BEAR_ATTACK_FATHER;
 		CurrentDadBearState = BearSubDadEnum.BEAR_DAD_MOVE_TOWARDS;
     	LerpTimeLeft = 0;
+		BearAttack();
+    }
 
+    public void BearAttack()
+    {
+		RemainingRestTime = ToRestMaxTime;
+
+    	BearSprite.flipX = TargetedBull.ifFacingRight;
+    	if(AttackType == 0)
+    	{
+			AttackType = 1;
+			BearSprite.sprite = DictionaryOfSprite["Bear_Slap_1"];
+    	}
+    	else
+    	{
+    		AttackType = 0;
+			BearSprite.sprite = DictionaryOfSprite["Bear_Slap_2"];
+    	}
     }
 
 //	public void StopMissing()

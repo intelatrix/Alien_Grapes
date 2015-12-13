@@ -13,11 +13,26 @@ public class BasicBull : MonoBehaviour
 	[Tooltip("The speed of spin while the bull flies away.")]
 	public float SpinSpeed;
 
+	[Tooltip("Name + Sprites")]
+	public List<NamedImage> ListOfSprite;
+	[Tooltip("Base Name for the Bull Sprite Animation")]
+	public string BullSpriteBaseName;
+	[Tooltip("The Time between each frame of the bull")]
+	public float TimeBetweenFrame;
+	[Tooltip("Total Amount Of Frames")]
+	public int ConstMaxFrame;
+	int CurrentFrame = 0;
+	float AnimationTimeLeft ;
+	Dictionary<string, Sprite> DictionaryOfSprite = new Dictionary<string, Sprite>();
+
+
+
 	// LifeCycle of the Bull
 	private LifeCycle state = LifeCycle.Living;
 	// Store rotation of the bull flying away
 	private Vector3 spinDirection;
     private Vector3 gravity = new Vector3(0.0f, -1.0f);
+    private SpriteRenderer BullRenderer;
 
     public enum TypeOfBull
 	{
@@ -36,6 +51,7 @@ public class BasicBull : MonoBehaviour
 	// Start is called once during instantiation
 	void Start()
 	{
+		AnimationTimeLeft = TimeBetweenFrame;
 		// Normalize the direction
 		FlyDirection.Normalize();
 		// Create the Vector that controls rotation while flying
@@ -50,6 +66,7 @@ public class BasicBull : MonoBehaviour
 			case LifeCycle.Living:
 				if (!IfGetHit)
 				{
+					
 					float QTEMultiplier;
 					if(GameSceneManager.Instance.currentGameState == GameSceneManager.GameState.GAME_NORMAL)
 						QTEMultiplier = 1; 
@@ -85,12 +102,20 @@ public class BasicBull : MonoBehaviour
 		}
 	}
 
+	void UpdateAnimation()
+	{
+		
+	}
+
 	public void Launch(TypeOfBull type, Vector3 spawnPos, float moveSpeed, bool faceRight)
 	{
 		bullType = type;
 		transform.position = spawnPos;
 		movementSpeed = moveSpeed;
 		ifFacingRight = faceRight;
+
+		BullRenderer = GetComponent<SpriteRenderer>();
+		BullRenderer.flipX = IfFacingRight;
 
 		// Y-Flip the FlyDirection if going from the left
 		if (ifFacingRight)
