@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class GameSceneManager : MonoSingleton<GameSceneManager>
 { 
@@ -25,6 +26,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
 	int MotherQTENumber = 3;
 	int FatherQTENumber = 5;
+
+	int Multiplier = 0;
+	int Score = 0;
+
+	public Text ScoreText, MultiplierText;
 
 	public enum GameState
 	{
@@ -63,6 +69,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 	SubDadGameState SubDadCurrentState = SubDadGameState.SUB_DAD_MOVE_TOWARDS;
 
 	public GameState currentGameState{get{return CurrentState;}}
+	public GameOverManager GameOverObject;
 
 
 	void Start()
@@ -155,11 +162,6 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			}
 
 		}
-
-        if (!Player_Bear.Instance.IsAlive)
-        {
-            SceneManager.LoadScene("MainScene");
-        }
 	}
 
 	void MotherGameUpdate()
@@ -435,7 +437,41 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
             TargetBull.StartKillSequence();
             Player_Bear.Instance.IncreaseCharge(1);
             ListofAllBulls.Remove(TargetBull);
+
+            OneBullGetKilled(TargetBull);
         }
+	}
+
+	public void OneBullGetKilled(BasicBull TargetBull)
+	{
+		++Multiplier;
+
+		switch(TargetBull.bullType)
+		{
+			case BasicBull.TypeOfBull.BULL_BABY:
+				Score += 1 * Multiplier;
+				break;
+			case BasicBull.TypeOfBull.BULL_MOTHER:
+				Score += 10 * Multiplier;
+				break;	
+			case BasicBull.TypeOfBull.BULL_FATHER:
+				Score += 25 * Multiplier;
+				break;	
+		}
+
+		UpdateScoreAndMultiplier();
+	}
+
+	void UpdateScoreAndMultiplier()
+	{
+		ScoreText.text = Score.ToString();
+		MultiplierText.text = "x" + Multiplier;
+	}
+
+	public void ResetMultiplier()
+	{	
+		Multiplier = 0;
+		UpdateScoreAndMultiplier();
 	}
 
     public void KillAllBulls()
@@ -447,5 +483,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
         // Clear it from the all list
         ListofAllBulls.Clear();
+    }
+
+    public void GameOver()
+    {
+ 		GameOverObject.enabled = true;
+    	this.enabled = false;
     }
 }

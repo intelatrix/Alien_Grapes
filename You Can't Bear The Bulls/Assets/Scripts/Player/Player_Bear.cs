@@ -57,6 +57,8 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
     int AttackType = 0;
 
+    public GameObject SteamObject;
+
     public enum BearState
     {
         BEAR_NONE,
@@ -250,6 +252,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     {
     	if(CurrentCharge != ConstMaxCharge)
 			CurrentCharge += AmountOfNewCharge;
+			
 
 		UpdateChargeBar();
     }
@@ -257,6 +260,11 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     void UpdateChargeBar()
     {
 		ChargeBar.fillAmount = (float)CurrentCharge / (float)ConstMaxCharge;
+
+		if(CurrentCharge == ConstMaxCharge)
+			SteamObject.SetActive(true);
+		else
+			SteamObject.SetActive(false);
     }
 
     public void SetBearAttackBaby(BasicBull AttackThisBull)
@@ -358,14 +366,26 @@ public class Player_Bear : MonoSingleton<Player_Bear>
                     }
                 }
                 else
-                {
+                {	
+                	GameSceneManager.Instance.ResetMultiplier();
 					BearSprite.flipX = HittingBull.GetComponentInParent<BasicBull>().ifFacingRight;
 					BearSprite.sprite = DictionaryOfSprite["BearHit"];
 	                --Health;
 	                UpdateTolerance();
 					GameSceneManager.Instance.BearGetsHit(HittingBull.gameObject);
+
+					if(Health == 0)
+						GameOver();
                 }
             }
+    }
+
+    void GameOver()
+    {
+    	GameSceneManager.Instance.GameOver();
+
+    	GetComponent<BoxCollider2D>().enabled = false;
+		this.enabled = false;
     }
 
     void UpdateTolerance()
