@@ -56,7 +56,10 @@ public abstract class Skill : MonoBehaviour
 
 			// Call derived use function
 			use ();
-		}
+
+            // Clear the skill icon
+            SkillManager.Instance.ResetSkillIcon();
+        }
 	}
 
 	public void CleanUp()
@@ -67,8 +70,6 @@ public abstract class Skill : MonoBehaviour
 
 			// Call derived clean up function
 			cleanUp ();
-
-            SkillManager.Instance.ResetSkillIcon();
 		}
 	}
 
