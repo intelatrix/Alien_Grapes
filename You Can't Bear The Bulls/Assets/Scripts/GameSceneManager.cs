@@ -388,9 +388,12 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			EnteringBull.ThisBullList = ListOfBullLeft;
 			ListOfBullLeft.Add(EnteringBull);
 		}
-
-        ListofAllBulls.Add(EnteringBull);
 	}
+
+    public void AddBullAllList(BasicBull NewBull)
+    {
+        ListofAllBulls.Add(NewBull);
+    }
 
 	public void RemoveBullFromList(BasicBull ExitingBull)
 	{
