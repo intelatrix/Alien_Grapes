@@ -41,7 +41,7 @@ public class BullSpawner : MonoBehaviour
 
 	// Track spawn chances
 	private float motherSpawnChance;
-    private float fatherSpawnChance;
+	private float fatherSpawnChance;
 
 	// Memory of Previous Bull
 	private BasicBull[] prevBullEachSide = new BasicBull[2];        // 0 - Left, 1 - Right
@@ -95,8 +95,8 @@ public class BullSpawner : MonoBehaviour
 			{
 				// Spawn
 				spawnBull (BasicBull.TypeOfBull.BULL_FATHER);
-                // Reset Spawn Chance
-                fatherSpawnChance = FatherStartSpawnChance;
+				// Reset Spawn Chance
+				fatherSpawnChance = FatherStartSpawnChance;
 			}
 			else if (motherSpawnChance > chance)
 			{
@@ -161,9 +161,8 @@ public class BullSpawner : MonoBehaviour
 		if (prevBull != null)
 		{
 			float totalDistToPlayer = Mathf.Abs(spawnPos.x - transform.position.x);
-            float totalDistToPrevBull = Mathf.Abs(prevBull.transform.position.x - transform.position.x);
-            float timeForPrevToReach = totalDistToPrevBull / prevBull.MovementSpeed;
-            float maxMoveSpeed = totalDistToPlayer / timeForPrevToReach;
+			float timeForPrevToReach = totalDistToPlayer / prevBull.MovementSpeed;
+			float maxMoveSpeed = totalDistToPlayer / timeForPrevToReach;
 
 			moveSpeed = Random.Range(MinSpeed, maxMoveSpeed);
 		}
