@@ -30,16 +30,19 @@ public class GameOverManager : MonoBehaviour {
 				++CurrentStage;
 				if(CurrentStage == 1)
 				{
+					SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLAP_1);
 					TimeTillNextText =0.5f;
 					UN.SetActive(true);
 				}
 				else if(CurrentStage == 2)
 				{
+					SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLAP_1);
 					TimeTillNextText = 0.5f;
 					BEAR.SetActive(true);
 				}
 				else 
 				{
+					SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLAP_1);
 					ABLE.SetActive(true);
 					PressAnyKeyTo.SetActive(true);
 				}

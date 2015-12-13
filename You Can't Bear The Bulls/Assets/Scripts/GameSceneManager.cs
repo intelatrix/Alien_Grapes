@@ -435,10 +435,26 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
         if (TargetBull.IsAlive)
         {
             TargetBull.StartKillSequence();
-            Player_Bear.Instance.IncreaseCharge(1);
+
             ListofAllBulls.Remove(TargetBull);
 
             OneBullGetKilled(TargetBull);
+
+            switch(TargetBull.bullType)
+            {
+				case BasicBull.TypeOfBull.BULL_BABY:
+				SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_BABY_MOO);
+				Player_Bear.Instance.IncreaseCharge(1);
+				break;	
+			case BasicBull.TypeOfBull.BULL_MOTHER:
+				SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_MOTHER_MOO);
+				Player_Bear.Instance.IncreaseCharge(1);
+				break;
+			case BasicBull.TypeOfBull.BULL_FATHER:
+				SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_FATHER_MOO);
+				Player_Bear.Instance.IncreaseFatherCharge();
+				break;
+            }
         }
 	}
 

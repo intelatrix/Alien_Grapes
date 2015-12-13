@@ -49,6 +49,11 @@ public class SoundManager : MonoSingleton<SoundManager>
 					break;
 			}
 		}
+
+		if(Instance == this)
+			DontDestroyOnLoad(this.gameObject);
+		else
+			Destroy(this);
 	}
 		
 	public void PlayBGM(BGM BGMType)

@@ -8,6 +8,7 @@ public class SlowDownSkill : Skill
 
 	protected override void start ()
 	{
+		SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_SLOW_MO);
         type = Type.SlowDown;
 	}
 

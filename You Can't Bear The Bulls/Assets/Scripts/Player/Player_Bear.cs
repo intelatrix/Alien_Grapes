@@ -258,6 +258,17 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		UpdateChargeBar();
     }
 
+	public void IncreaseFatherCharge()
+    {
+    	CurrentCharge += ConstMaxCharge/2;
+
+    	if(CurrentCharge > ConstMaxCharge)
+    		CurrentCharge = ConstMaxCharge;
+			
+
+		UpdateChargeBar();
+    }
+
     void UpdateChargeBar()
     {
 		ChargeBar.fillAmount = (float)CurrentCharge / (float)ConstMaxCharge;
@@ -368,6 +379,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
                        return;
                     }
 
+                    SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_BEAR_INJUR);
 					GameSceneManager.Instance.ResetMultiplier();
 					BearSprite.flipX = HittingBull.GetComponentInParent<BasicBull>().ifFacingRight;
 					BearSprite.sprite = DictionaryOfSprite["BearHit"];
@@ -380,6 +392,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
                 }
                 else
                 {	
+					SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_BEAR_INJUR);
                 	GameSceneManager.Instance.ResetMultiplier();
 					BearSprite.flipX = HittingBull.GetComponentInParent<BasicBull>().ifFacingRight;
 					BearSprite.sprite = DictionaryOfSprite["BearHit"];
@@ -437,6 +450,8 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 			CurrentCharge = 0;
 			GameSceneManager.Instance.KillAllBulls();
 			BearSprite.sprite = DictionaryOfSprite["BearRoar"];
+
+			SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_BEAR_ROAR);
 
 			CurrentBearState = BearState.BEAR_ROAR;
 			RoarTimeLeft = MaxRoarTime;

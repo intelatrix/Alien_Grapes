@@ -7,6 +7,7 @@ public class BeeShieldSkill : Skill
 
 	protected override void start ()
 	{
+		SoundManager.Instance.PlayEffect(SoundManager.Effects.EFFECT_BEE_SHIELD);
         type = Type.BeeShield;
         visual = GetComponent<SpriteRenderer>();
     }
