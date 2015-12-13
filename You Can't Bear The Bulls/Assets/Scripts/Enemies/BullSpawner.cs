@@ -21,16 +21,20 @@ public class BullSpawner : MonoBehaviour
 
 	// Spawn Conditions for Special Bulls
 	[Tooltip("Chance for MotherBull to spawn at the start.")]
-	public float MotherStartSpawnChance = 10.0f;
-	[Tooltip("Number of kill points needed before the Mother spawn chance is 100%.")]
-	public int MinKilledToForceSpawnMother = 25;
+	public float MomStartSpawnChance = 10.0f;
+	[Tooltip("Number of kill points needed before the Mother spawn chance is max.")]
+	public int MinKillToMaxSpawnMom = 25;
+    [Tooltip("The max percentage for spawn of the Mom.")]
+    public int MaxMomSpawnChance = 30;
 	[Tooltip("Chance for FatherBull to spawn at the start.")]
-	public float FatherStartSpawnChance = 1.0f;
-	[Tooltip("Number of kill points needed before the Father spawn chance is 100%.")]
-	public int MinKilledToForceSpawnFather = 50;
+	public float DadStartSpawnChance = 1.0f;
+	[Tooltip("Number of kill points needed before the Father spawn chance is max.")]
+	public int MinKilledToMaxSpawnDad = 50;
+    [Tooltip("The max percentage for spawn of the Mom.")]
+    public int MaxDadSpawnChance = 20;
 
-	// Spawn Conditions Variables for Special Bulls
-	[Tooltip("Kill points a baby kill provides.")]
+    // Spawn Conditions Variables for Special Bulls
+    [Tooltip("Kill points a baby kill provides.")]
 	public int BabyForceSpawnWeight = 1;
 	[Tooltip("Kill points a mother kill provides.")]
 	public int MotherForceSpawnWeight = 5;
@@ -67,12 +71,12 @@ public class BullSpawner : MonoBehaviour
 	void Start()
 	{
 		// Calculate Increments in Chances
-		spawnIncrementFather = (100 - FatherStartSpawnChance) / MinKilledToForceSpawnFather;
-		spawnIncrementMother = (100 - MotherStartSpawnChance) / MinKilledToForceSpawnMother;
+		spawnIncrementFather = (MaxDadSpawnChance - DadStartSpawnChance) / MinKilledToMaxSpawnDad;
+		spawnIncrementMother = (MaxMomSpawnChance - MomStartSpawnChance) / MinKillToMaxSpawnMom;
 
 		// Initialize trackers for spawn chances
-		motherSpawnChance = MotherStartSpawnChance;
-		fatherSpawnChance = FatherStartSpawnChance;
+		motherSpawnChance = MomStartSpawnChance;
+		fatherSpawnChance = DadStartSpawnChance;
 	}
 
 	// Update is called once per frame
@@ -89,32 +93,40 @@ public class BullSpawner : MonoBehaviour
 		{
 			// Calculate chance for this spawn
 			int chance = Random.Range(0, 100);
+            if (chance <= fatherSpawnChance)
+            {
+                // Spawn
+                spawnBull(BasicBull.TypeOfBull.BULL_FATHER);
+                // Reset Spawn Chance
+                fatherSpawnChance = DadStartSpawnChance;
+            }
+            else if (chance <= fatherSpawnChance + motherSpawnChance)
+            {
+                // Spawn
+                spawnBull(BasicBull.TypeOfBull.BULL_MOTHER);
+                // Reset Spawn Chance
+                motherSpawnChance = MomStartSpawnChance;
+                // Increase the spawn chances for specials
+                fatherSpawnChance += spawnIncrementFather * MotherForceSpawnWeight;
+            }
+            else
+            {
+                // Spawn
+                spawnBull(BasicBull.TypeOfBull.BULL_BABY);
+                // Increase the spawn chances for specials
+                fatherSpawnChance += spawnIncrementFather * BabyForceSpawnWeight;
+                motherSpawnChance += spawnIncrementMother * BabyForceSpawnWeight;
+            }
 
-			// Decide what to spawn
-			if (fatherSpawnChance > chance)
-			{
-				// Spawn
-				spawnBull (BasicBull.TypeOfBull.BULL_FATHER);
-				// Reset Spawn Chance
-				fatherSpawnChance = FatherStartSpawnChance;
-			}
-			else if (motherSpawnChance > chance)
-			{
-				// Spawn
-				spawnBull(BasicBull.TypeOfBull.BULL_MOTHER);
-				// Reset Spawn Chance
-				motherSpawnChance = MotherStartSpawnChance;
-				// Increase the spawn chances for specials
-				fatherSpawnChance += spawnIncrementFather * MotherForceSpawnWeight;
-			}
-			else
-			{
-				// Spawn
-				spawnBull(BasicBull.TypeOfBull.BULL_BABY);
-				// Increase the spawn chances for specials
-				fatherSpawnChance += spawnIncrementFather * BabyForceSpawnWeight;
-				motherSpawnChance += spawnIncrementMother * BabyForceSpawnWeight;
-			}
+            // Prevent the chances from going over the max
+            if (motherSpawnChance > MaxMomSpawnChance)
+            {
+                motherSpawnChance = MaxMomSpawnChance;
+            }
+            if (fatherSpawnChance > MaxDadSpawnChance)
+            {
+                fatherSpawnChance = MaxDadSpawnChance;
+            }
 		}
 	}
 
