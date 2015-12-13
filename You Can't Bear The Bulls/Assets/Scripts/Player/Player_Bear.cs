@@ -82,6 +82,13 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     void Update()
     {
         BearUpdate();
+
+        // Move the skill to the player
+        if (playerSkill != null)
+        {
+            playerSkill.transform.position = transform.position;
+        }
+
     }
 
     void BearUpdate()
@@ -268,6 +275,13 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
 	void SetSkill(Skill skill)
 	{
-		playerSkill = skill;
+        // Clean up the previous skill if it exists
+        if (playerSkill != null)
+        {
+            playerSkill.GetComponent<Skill>().EndPrematurely();
+            Destroy(playerSkill);
+        }
+
+        playerSkill = skill;
 	}
 }
