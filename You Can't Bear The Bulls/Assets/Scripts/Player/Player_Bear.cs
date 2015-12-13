@@ -26,10 +26,6 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     float LerpTimeLeft = 0;
 	public float lerpTimeLeft { get { return LerpTimeLeft; } }
 
-
-    public int ConstMaxCharge = 100;
-    int CurrentCharge = 0;
-
 	public float ConstAwayFrom = 2;
 	public float MissDistance = 0.5f;
 
@@ -43,7 +39,14 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
     Vector3 MissTowards;
 
+    //Health & Charge
     public Image ChargeBar;
+    public Image BearToleranceLevel;
+
+    public int ConstMaxCharge = 40;
+    int CurrentCharge = 0;
+
+    int Health = 3;
 
     public enum BearState
     {
@@ -69,7 +72,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     // Use this for initialization
     void Start()
     {
-		//ChargeBar.fillAmount = 0.5f;
+	
 		foreach(NamedImage NewSprite in ListOfSprite)
 		{
 			DictionaryOfSprite.Add(NewSprite.name, NewSprite.image);
@@ -204,10 +207,17 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		}
     }
 
-    void IncreaseCharge(int AmountOfNewCharge)
+    public void IncreaseCharge(int AmountOfNewCharge)
     {
-		CurrentCharge += AmountOfNewCharge;
+    	if(CurrentCharge != ConstMaxCharge)
+			CurrentCharge += AmountOfNewCharge;
 
+		UpdateChargeBar();
+    }
+
+    void UpdateChargeBar()
+    {
+		ChargeBar.fillAmount = (float)CurrentCharge / (float)ConstMaxCharge;
     }
 
     public void SetBearAttackBaby(BasicBull AttackThisBull)
@@ -261,8 +271,16 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     {
     	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_MISS || CurrentBearState == BearState.BEAR_NONE))
     	{
+
+    		--Health;
+			UpdateTolerance();
 	        GameSceneManager.Instance.BearGetsHit(collision.gameObject);
         }
+    }
+
+    void UpdateTolerance()
+    {
+		BearToleranceLevel.sprite = DictionaryOfSprite["BearTolerance" + Health];
     }
 
 	void UseSkill()

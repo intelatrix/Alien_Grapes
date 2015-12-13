@@ -50,13 +50,19 @@ public class BasicBull : MonoBehaviour
 			case LifeCycle.Living:
 				if (!IfGetHit)
 				{
+					float QTEMultiplier;
+					if(GameSceneManager.Instance.currentGameState == GameSceneManager.GameState.GAME_NORMAL)
+						QTEMultiplier = 1; 
+					else
+						QTEMultiplier = 0.02f;
+
 					if (IfFacingRight)
 					{
-						transform.position += new Vector3(1, 0, 0) * MovementSpeed * TimeManager.Instance.GetGameDeltaTime();
+						transform.position += new Vector3(1, 0, 0) * MovementSpeed * TimeManager.Instance.GetGameDeltaTime() * QTEMultiplier;
 					}
 					else
 					{
-						transform.position += new Vector3(-1, 0, 0) * MovementSpeed * TimeManager.Instance.GetGameDeltaTime();
+						transform.position += new Vector3(-1, 0, 0) * MovementSpeed * TimeManager.Instance.GetGameDeltaTime()  * QTEMultiplier;
 					}
 				}
 				break;

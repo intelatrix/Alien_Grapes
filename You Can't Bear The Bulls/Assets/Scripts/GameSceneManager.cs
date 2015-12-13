@@ -8,6 +8,9 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 	List<BasicBull> ListOfBullRight = new List<BasicBull>();
 	List<BasicBull> ListofAllBulls = new List<BasicBull>();
 
+	public int SizeOfLeftList{get{return ListOfBullLeft.Count;}} 
+	public int SizeOfRightList{get{return ListOfBullRight.Count;}} 
+
 	public QTEManager MotherQTEManager, FatherQTEManager;
 
 	bool IfMiss = false;
@@ -22,7 +25,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 	int MotherQTENumber = 3;
 	int FatherQTENumber = 5;
 
-	enum GameState
+	public enum GameState
 	{
 		GAME_NORMAL,
 		GAME_MOTHER_QTE,
@@ -57,6 +60,10 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 	GameState CurrentState = GameState.GAME_NORMAL;
 	SubMomGameState SubMomCurrentState = SubMomGameState.SUB_MOM_MOVE_TOWARDS;
 	SubDadGameState SubDadCurrentState = SubDadGameState.SUB_DAD_MOVE_TOWARDS;
+
+	public GameState currentGameState{get{return CurrentState;}}
+
+
 	void Start()
 	{
 		MotherQTEManager.StartQTE(MotherQTENumber);
@@ -365,8 +372,23 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
 	}
 
+	public void RemoveBullFromList(BasicBull ExitingBull)
+	{
+		if (!ExitingBull.IfFacingRight)
+		{
+			ExitingBull.ThisBullList = ListOfBullRight;
+			ListOfBullRight.Remove(ExitingBull);
+		}
+		else
+		{
+			ExitingBull.ThisBullList = ListOfBullLeft;
+			ListOfBullLeft.Remove(ExitingBull);
+		}
+	}
+
 	public void BullGetPunched(BasicBull TargetBull)
 	{
         TargetBull.StartKillSequence();
+        Player_Bear.Instance.IncreaseCharge(1);
 	}
 }
