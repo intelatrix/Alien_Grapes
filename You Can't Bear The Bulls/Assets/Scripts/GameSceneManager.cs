@@ -110,7 +110,13 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 					break;
 			}
 
-			if (TempList == null)
+            // Use skill
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                Player_Bear.Instance.UseSkill();
+            }
+
+            if (TempList == null)
 			{
 			   
 			}
@@ -165,19 +171,21 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 					Player_Bear.Instance.FinishMom();
 					BullGetPunched(Player_Bear.Instance.targetedBull);
 
-					CurrentState = GameState.GAME_NORMAL;
+                    // Give the player a Power up
+                    Player_Bear.Instance.SetSkill(SkillManager.Instance.SpawnRandomSkill());
+
+                    CurrentState = GameState.GAME_NORMAL;
 				}
 				else if(IfLastKey == -1 ||  TimeLeftForQTE < 0)
 				{
 					ResetMomQTE();
 					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
-					CurrentState = GameState.GAME_NORMAL;
+                    
+                    CurrentState = GameState.GAME_NORMAL;
 				}
-
 				break;
 			case SubMomGameState.SUB_MOM_FINISHING:
-				
-				break;
+                break;
 
 		}
 	}
@@ -352,8 +360,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
 	public void BearGetsHit(GameObject HittingBull)
 	{
-		HittingBull.GetComponent<BasicBull>().ThisBullList.Remove(HittingBull.GetComponent<BasicBull>());
-		Destroy(HittingBull);
+        if (HittingBull.GetComponent<BasicBull>().IsAlive)
+        {
+            HittingBull.GetComponent<BasicBull>().ThisBullList.Remove(HittingBull.GetComponent<BasicBull>());
+            Destroy(HittingBull);
+        }
 	}
 
 	public void AddBullInsideList(BasicBull EnteringBull)

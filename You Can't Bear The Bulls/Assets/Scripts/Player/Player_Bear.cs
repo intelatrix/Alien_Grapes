@@ -35,7 +35,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	Dictionary<string, Sprite> DictionaryOfSprite = new Dictionary<string, Sprite>();
 
 	// Skills
-	private Skill playerSkill = null;
+	private GameObject playerSkill = null;
 
     Vector3 MissTowards;
 
@@ -271,10 +271,31 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     {
     	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_MISS || CurrentBearState == BearState.BEAR_NONE))
     	{
+            // Normal Collision
+            if (collision.GetComponentInParent<BasicBull>().IsAlive)
+            {
+                // Check if any skill can interrupt
+                if (playerSkill != null)
+                {
+                    Skill currentSkill = playerSkill.GetComponent<Skill>();
 
-    		--Health;
-			UpdateTolerance();
-	        GameSceneManager.Instance.BearGetsHit(collision.gameObject);
+                    // If the bee shield is present
+                    if (currentSkill != null && currentSkill.SkillType == Skill.Type.BeeShield && currentSkill.IsUsing)
+                    {
+                        // Shield absorbs the damage
+                        currentSkill.EndPrematurely();
+                        // Kill the Bull
+                        collision.GetComponentInParent<BasicBull>().StartKillSequence();
+
+                        // Don't need to proceed and kill ourselves later anymore
+                        return;
+                    }
+                }
+
+                --Health;
+                UpdateTolerance();
+                GameSceneManager.Instance.BearGetsHit(collision.gameObject);
+            }
         }
     }
 
@@ -283,23 +304,32 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 		BearToleranceLevel.sprite = DictionaryOfSprite["BearTolerance" + Health];
     }
 
-	void UseSkill()
+	public void UseSkill()
 	{
-		if (playerSkill.IsUnused)
+		if (playerSkill != null)
 		{
-			playerSkill.Use ();
-		}
-	}
+            Skill skill = playerSkill.GetComponent<Skill>();
 
-	void SetSkill(Skill skill)
-	{
+            if (skill.IsUnused)
+            {
+                skill.Use();
+            }
+
+        }
+    }
+
+    public void SetSkill(GameObject skill)
+    {
         // Clean up the previous skill if it exists
-        if (playerSkill != null)
+        if (skill == null)
         {
-            playerSkill.GetComponent<Skill>().EndPrematurely();
-            Destroy(playerSkill);
+            return;
         }
 
         playerSkill = skill;
-	}
+
+        // Move the skill to the player
+        playerSkill.transform.position = transform.position;
+    }
+
 }
