@@ -139,7 +139,7 @@ public class BasicBull : MonoBehaviour
 		if (ifFacingRight)
 		{
 			FlyDirection.x = -FlyDirection.x;
-			spinDirection.z = -spinDirection.z;
+            spinDirection = -spinDirection;
 		}
 	}
 	

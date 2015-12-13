@@ -201,5 +201,8 @@ public class BullSpawner : MonoBehaviour
 		{
 			prevBullEachSide[1] = newBull.GetComponent<BasicBull>();
 		}
+
+        // Store this bull in the all list
+        GameSceneManager.Instance.AddBullInsideList(newBull.GetComponent<BasicBull>());
 	}
 }

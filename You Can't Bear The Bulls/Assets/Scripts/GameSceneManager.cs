@@ -389,7 +389,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			ListOfBullLeft.Add(EnteringBull);
 		}
 
-
+        ListofAllBulls.Add(EnteringBull);
 	}
 
 	public void RemoveBullFromList(BasicBull ExitingBull)
@@ -404,7 +404,9 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			ExitingBull.ThisBullList = ListOfBullLeft;
 			ListOfBullLeft.Remove(ExitingBull);
 		}
-	}
+
+        
+    }
 
 	public void BullGetPunched(BasicBull TargetBull)
 	{
@@ -412,6 +414,18 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
         {
             TargetBull.StartKillSequence();
             Player_Bear.Instance.IncreaseCharge(1);
+            ListofAllBulls.Remove(TargetBull);
         }
 	}
+
+    public void KillAllBulls()
+    {
+        foreach (var bull in ListofAllBulls)
+        {
+            bull.StartKillSequence();
+        }
+
+        // Clear it from the all list
+        ListofAllBulls.Clear();
+    }
 }
