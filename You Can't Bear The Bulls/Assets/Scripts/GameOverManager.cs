@@ -18,7 +18,7 @@ public class GameOverManager : MonoBehaviour {
 		{
 			if (Input.anyKeyDown)
 			{
-				
+				Application.LoadLevel("MainScene");
 			}
 		}
 		else
@@ -41,6 +41,7 @@ public class GameOverManager : MonoBehaviour {
 				else 
 				{
 					ABLE.SetActive(true);
+					PressAnyKeyTo.SetActive(true);
 				}
 			}
 		}

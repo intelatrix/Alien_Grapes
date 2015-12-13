@@ -363,8 +363,18 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 						HittingBull.GetComponentInParent<BasicBull>().StartKillSequence();
 
                         // Don't need to proceed and kill ourselves later anymore
-                       // return;
+                       return;
                     }
+
+					GameSceneManager.Instance.ResetMultiplier();
+					BearSprite.flipX = HittingBull.GetComponentInParent<BasicBull>().ifFacingRight;
+					BearSprite.sprite = DictionaryOfSprite["BearHit"];
+	                --Health;
+	                UpdateTolerance();
+					GameSceneManager.Instance.BearGetsHit(HittingBull.gameObject);
+
+					if(Health == 0)
+						GameOver();
                 }
                 else
                 {	
