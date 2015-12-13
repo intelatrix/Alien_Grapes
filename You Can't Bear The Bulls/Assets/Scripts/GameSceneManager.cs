@@ -112,9 +112,16 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			}
 
             // Use skill
-            if (Input.GetKeyDown(KeyCode.Z))
+			if(CurrentKeyPressed == ArrowKeysPressed.KEYS_NONE)
             {
-                Player_Bear.Instance.UseSkill();
+            	if (Input.GetKeyDown(KeyCode.Z))
+            	{
+                	Player_Bear.Instance.UseSkill();
+            	}
+				else if(Input.GetKeyDown(KeyCode.X))
+				{
+					Player_Bear.Instance.UseCharge();	
+				}
             }
 
             if (TempList == null)
@@ -142,7 +149,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 		{
 			MissTimeLeft -= TimeManager.Instance.GetGameDeltaTime();
 			if(MissTimeLeft <=0)
+			{
+				Player_Bear.Instance.StopMissing();
 				IfMiss = false;
+			}
+
 		}
 
         if (!Player_Bear.Instance.IsAlive)
@@ -185,7 +196,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 				else if(IfLastKey == -1 ||  TimeLeftForQTE < 0)
 				{
 					ResetMomQTE();
-					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
+					Player_Bear.Instance.BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
                     
                     CurrentState = GameState.GAME_NORMAL;
 				}
@@ -232,7 +243,7 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 				else if(IfLastKey == -1 ||  TimeLeftForQTE < 0)
 				{
 					ResetDadQTE();
-					BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
+					Player_Bear.Instance.BearGetsHit(Player_Bear.Instance.targetedBull.gameObject);
 					CurrentState = GameState.GAME_NORMAL;
 				}
 				else if(IfLastKey == 0)

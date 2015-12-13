@@ -32,6 +32,9 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	public float ConstAwayFrom = 2;
 	public float MissDistance = 0.5f;
 
+	public float MaxRoarTime = 0.3f;
+	float RoarTimeLeft = 0;
+
 	// Textures/Sprites
 	public SpriteRenderer BearSprite;
 	public List<NamedImage> ListOfSprite;
@@ -60,7 +63,8 @@ public class Player_Bear : MonoSingleton<Player_Bear>
         BEAR_ATTACK_BABY,
 		BEAR_ATTACK_MOTHER,
 		BEAR_ATTACK_FATHER,
-        BEAR_MISS
+        BEAR_MISS,
+        BEAR_ROAR
     }
 
     public enum BearSubMomEnum
@@ -119,6 +123,10 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 			case BearState.BEAR_NONE:
 				BearNoneUpdate();
 				break;
+
+		case BearState.BEAR_ROAR:
+				BearRoarUpdate();
+				break;
         }
     }
 
@@ -133,6 +141,16 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     		}
     	}
     }
+
+	void BearRoarUpdate()
+	{
+		RoarTimeLeft -= TimeManager.Instance.GetGameDeltaTime();
+		if(RoarTimeLeft < 0)
+		{
+			CurrentBearState = BearState.BEAR_NONE;
+			BearSprite.sprite = DictionaryOfSprite["BearFrontIdle"];
+		}
+	}
 
 	void BearAttackBabyUpdate()
     {
@@ -285,10 +303,10 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     	}
     }
 
-//	public void StopMissing()
-//    {
-//		CurrentBearState = BearState.BEAR_NONE;
-//    }
+	public void StopMissing()
+    {
+		BearSprite.sprite = DictionaryOfSprite["BearFaceRight"];
+    }
 
     public void SetBearMiss(bool IfFacingRight)
     {
@@ -299,6 +317,9 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 			MissTowards = transform.position + new Vector3(-1,0,0);
 
 		LerpTimeLeft = 0;
+
+		BearSprite.flipX = !IfFacingRight;
+		BearSprite.sprite = DictionaryOfSprite["BearMiss"];
     }
 
     public BearState GetBearState()
@@ -310,8 +331,14 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     {
     	if(collision.tag == "Bull" && (CurrentBearState == BearState.BEAR_MISS || CurrentBearState == BearState.BEAR_NONE))
     	{
-            // Normal Collision
-            if (collision.GetComponentInParent<BasicBull>().IsAlive)
+           BearGetsHit(collision.gameObject);
+        }
+    }
+
+    public void BearGetsHit(GameObject HittingBull)
+    {
+		// Normal Collision
+			if (HittingBull.GetComponentInParent<BasicBull>().IsAlive)
             {
                 // Check if any skill can interrupt
                 if (playerSkill != null)
@@ -324,18 +351,21 @@ public class Player_Bear : MonoSingleton<Player_Bear>
                         // Shield absorbs the damage
                         currentSkill.EndPrematurely();
                         // Kill the Bull
-                        collision.GetComponentInParent<BasicBull>().StartKillSequence();
+						HittingBull.GetComponentInParent<BasicBull>().StartKillSequence();
 
                         // Don't need to proceed and kill ourselves later anymore
-                        return;
+                       // return;
                     }
                 }
-
-                --Health;
-                UpdateTolerance();
-                GameSceneManager.Instance.BearGetsHit(collision.gameObject);
+                else
+                {
+					BearSprite.flipX = HittingBull.GetComponentInParent<BasicBull>().ifFacingRight;
+					BearSprite.sprite = DictionaryOfSprite["BearHit"];
+	                --Health;
+	                UpdateTolerance();
+					GameSceneManager.Instance.BearGetsHit(HittingBull.gameObject);
+                }
             }
-        }
     }
 
     void UpdateTolerance()
@@ -354,6 +384,21 @@ public class Player_Bear : MonoSingleton<Player_Bear>
                 skill.Use();
             }
 
+        }
+    }
+
+	public void UseCharge()
+	{
+		if (CurrentCharge == ConstMaxCharge)
+		{
+			CurrentCharge = 0;
+			GameSceneManager.Instance.KillAllBulls();
+			BearSprite.sprite = DictionaryOfSprite["BearRoar"];
+
+			CurrentBearState = BearState.BEAR_ROAR;
+			RoarTimeLeft = MaxRoarTime;
+
+			UpdateChargeBar();
         }
     }
 
