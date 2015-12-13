@@ -388,7 +388,10 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 
 	public void BullGetPunched(BasicBull TargetBull)
 	{
-        TargetBull.StartKillSequence();
-        Player_Bear.Instance.IncreaseCharge(1);
+        if (TargetBull.IsAlive)
+        {
+            TargetBull.StartKillSequence();
+            Player_Bear.Instance.IncreaseCharge(1);
+        }
 	}
 }

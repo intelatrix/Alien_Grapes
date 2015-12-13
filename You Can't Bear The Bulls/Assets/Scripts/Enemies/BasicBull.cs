@@ -120,6 +120,7 @@ public class BasicBull : MonoBehaviour
 	public TypeOfBull BullType { get { return bullType; } }
 	public bool IfFacingRight { get { return ifFacingRight; } }
 	public float MovementSpeed { get { return movementSpeed; } }
+    public bool IsAlive { get { return state == LifeCycle.Living; } }
 
 	public bool BullEntered = false;
 }
