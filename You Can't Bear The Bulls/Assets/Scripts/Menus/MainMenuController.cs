@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.SceneManagement;
 using System.Collections;
 
 public class MainMenuController : MonoBehaviour 
@@ -13,12 +12,12 @@ public class MainMenuController : MonoBehaviour
 
 	public void StartGame()
 	{
-		EditorSceneManager.LoadScene ("GameScene");
+		Application.LoadLevel ("GameScene");
 	}
 
     public void OpenCredits()
     {
-        EditorSceneManager.LoadScene("CreditsScene");
+        Application.LoadLevel("CreditsScene");
     }
 
     public void QuitGame()
@@ -28,6 +27,6 @@ public class MainMenuController : MonoBehaviour
 
     public void GoBackToMainMenu()
     {
-        EditorSceneManager.LoadScene("MainScene");
+        Application.LoadLevel("MainScene");
     }
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor.SceneManagement;
 using System.Collections;
 
 public class SplashMenuController : MonoBehaviour 
@@ -12,7 +11,7 @@ public class SplashMenuController : MonoBehaviour
 		WaitTime -= Time.deltaTime;
 		if (WaitTime < 0.0f)
 		{
-			EditorSceneManager.LoadScene ("MainScene");
+            Application.LoadLevel("MainScene");
 		}
 	}
 }
