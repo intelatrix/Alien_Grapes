@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -143,6 +144,11 @@ public class GameSceneManager : MonoSingleton<GameSceneManager>
 			if(MissTimeLeft <=0)
 				IfMiss = false;
 		}
+
+        if (!Player_Bear.Instance.IsAlive)
+        {
+            SceneManager.LoadScene("MainScene");
+        }
 	}
 
 	void MotherGameUpdate()

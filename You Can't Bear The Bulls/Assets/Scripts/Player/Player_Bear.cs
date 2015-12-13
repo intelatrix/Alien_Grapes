@@ -50,6 +50,7 @@ public class Player_Bear : MonoSingleton<Player_Bear>
     int CurrentCharge = 0;
 
     int Health = 3;
+    public bool IsAlive { get { return Health > 0; } }
 
     int AttackType = 0;
 
