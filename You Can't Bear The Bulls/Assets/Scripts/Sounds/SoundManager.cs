@@ -13,7 +13,16 @@ public class SoundManager : MonoSingleton<SoundManager>
 	public enum Effects
 	{
 		EFFECT_NONE,
-		EFFECT_CLICK
+		EFFECT_CLICK,
+        EFFECT_SLAP_1,
+        EFFECT_SLAP_2,
+        EFFECT_FATHER_MOO,
+        EFFECT_MOTHER_MOO,
+        EFFECT_BABY_MOO,
+        EFFECT_BEAR_INJUR,
+        EFFECT_BEE_SHIELD,
+        EFFECT_SLOW_MO,
+        EFFECT_BEAR_ROAR
 	}
 	
 	public List<SoundFile> AudioList = new List<SoundFile>();
