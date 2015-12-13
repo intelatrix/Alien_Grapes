@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Enemies\BasicBull.cs" />
     <Compile Include="Assets\Scripts\Enemies\BullSpawner.cs" />
     <Compile Include="Assets\Scripts\GameSceneManager.cs" />
+    <Compile Include="Assets\Scripts\Menus\CreditsSceneController.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\Menus\SplashMenuController.cs" />
     <Compile Include="Assets\Scripts\MonoSingleton.cs" />

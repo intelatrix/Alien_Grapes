@@ -16,8 +16,18 @@ public class MainMenuController : MonoBehaviour
 		EditorSceneManager.LoadScene ("Test");
 	}
 
-	public void QuitGame()
+    public void OpenCredits()
+    {
+        EditorSceneManager.LoadScene("CreditsScene");
+    }
+
+    public void QuitGame()
 	{
 		Application.Quit ();
 	}
+
+    public void GoBackToMainMenu()
+    {
+        EditorSceneManager.LoadScene("MainScene");
+    }
 }
