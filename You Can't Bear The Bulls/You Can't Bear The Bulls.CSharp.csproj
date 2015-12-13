@@ -72,13 +72,14 @@
     <Compile Include="Assets\Scripts\Enemies\BabyBull.cs" />
     <Compile Include="Assets\Scripts\Enemies\BasicBull.cs" />
     <Compile Include="Assets\Scripts\Enemies\BullSpawner.cs" />
+    <Compile Include="Assets\Scripts\GameOverManager.cs" />
     <Compile Include="Assets\Scripts\GameSceneManager.cs" />
-    <Compile Include="Assets\Scripts\Menus\CreditsSceneController.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenuController.cs" />
     <Compile Include="Assets\Scripts\Menus\SplashMenuController.cs" />
     <Compile Include="Assets\Scripts\MonoSingleton.cs" />
     <Compile Include="Assets\Scripts\Player\BarCollider.cs" />
     <Compile Include="Assets\Scripts\Player\Player_Bear.cs" />
+    <Compile Include="Assets\Scripts\Player\Steam.cs" />
     <Compile Include="Assets\Scripts\QTE\QTEQue.cs" />
     <Compile Include="Assets\Scripts\QTEManager.cs" />
     <Compile Include="Assets\Scripts\Skills\BeeShieldSkill.cs" />
