@@ -84,6 +84,7 @@ public abstract class Skill : MonoBehaviour
 	public bool IsUnused { get { return (activated == false && skillTimer > 0.0f); } }
 	public bool IsUsing { get { return activated; } }
 	public bool HasExpired { get { return skillTimer < 0.0f; } }
+    public Type SkillType { get { return type; } }
 
 	// Functions to implement
 	protected abstract void start();
