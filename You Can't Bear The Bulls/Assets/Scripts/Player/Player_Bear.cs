@@ -41,7 +41,8 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 	Dictionary<string, Sprite> DictionaryOfSprite = new Dictionary<string, Sprite>();
 
 	// Skills
-	private GameObject playerSkill = null;
+	private GameObject heldSkill = null;
+    private GameObject currentSkill = null;
 
     Vector3 MissTowards;
 
@@ -99,9 +100,9 @@ public class Player_Bear : MonoSingleton<Player_Bear>
         BearUpdate();
 
         // Move the skill to the player
-        if (playerSkill != null)
+        if (currentSkill != null)
         {
-            playerSkill.transform.position = transform.position;
+            currentSkill.transform.position = transform.position;
         }
 
     }
@@ -349,15 +350,15 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 			if (HittingBull.GetComponentInParent<BasicBull>().IsAlive)
             {
                 // Check if any skill can interrupt
-                if (playerSkill != null)
+                if (currentSkill != null)
                 {
-                    Skill currentSkill = playerSkill.GetComponent<Skill>();
+                    Skill skill = currentSkill.GetComponent<Skill>();
 
                     // If the bee shield is present
-                    if (currentSkill != null && currentSkill.SkillType == Skill.Type.BeeShield && currentSkill.IsUsing)
+                    if (skill != null && skill.SkillType == Skill.Type.BeeShield && skill.IsUsing)
                     {
-                        // Shield absorbs the damage
-                        currentSkill.EndPrematurely();
+                    // Shield absorbs the damage
+                        skill.EndPrematurely();
                         // Kill the Bull
 						HittingBull.GetComponentInParent<BasicBull>().StartKillSequence();
 
@@ -395,12 +396,15 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
 	public void UseSkill()
 	{
-		if (playerSkill != null)
+		if (heldSkill != null)
 		{
-            Skill skill = playerSkill.GetComponent<Skill>();
+            Skill skill = heldSkill.GetComponent<Skill>();
+            heldSkill.transform.position = transform.position;
 
             if (skill.IsUnused)
             {
+                currentSkill = heldSkill;
+                heldSkill = null;
                 skill.Use();
             }
 
@@ -430,10 +434,10 @@ public class Player_Bear : MonoSingleton<Player_Bear>
             return;
         }
 
-        playerSkill = skill;
+        heldSkill = skill;
 
         // Move the skill to the player
-        playerSkill.transform.position = transform.position;
+        heldSkill.transform.position = transform.position;
     }
 
 }
