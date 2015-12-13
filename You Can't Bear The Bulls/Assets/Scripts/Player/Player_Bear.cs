@@ -415,6 +415,13 @@ public class Player_Bear : MonoSingleton<Player_Bear>
 
             if (skill.IsUnused)
             {
+                // Clear the current if necessary
+                if (currentSkill != null)
+                {
+                    currentSkill.GetComponent<Skill>().EndPrematurely();
+                }
+
+                // Set up and start the next
                 currentSkill = heldSkill;
                 heldSkill = null;
                 skill.Use();
