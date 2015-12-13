@@ -56,6 +56,13 @@ public class BasicBull : MonoBehaviour
 		FlyDirection.Normalize();
 		// Create the Vector that controls rotation while flying
 		spinDirection = new Vector3(0.0f, 0.0f, SpinSpeed);
+
+		foreach(NamedImage NewSprite in ListOfSprite)
+		{
+			DictionaryOfSprite.Add(NewSprite.name, NewSprite.image);
+		}
+
+		ListOfSprite = null;
     }
 
 	// Update is called once per frame
@@ -81,6 +88,8 @@ public class BasicBull : MonoBehaviour
 					{
 						transform.position += new Vector3(-1, 0, 0) * MovementSpeed * TimeManager.Instance.GetGameDeltaTime()  * QTEMultiplier;
 					}
+
+					UpdateAnimation(QTEMultiplier * MovementSpeed);
 				}
 				break;
 			case LifeCycle.Flying:
@@ -102,9 +111,18 @@ public class BasicBull : MonoBehaviour
 		}
 	}
 
-	void UpdateAnimation()
+	void UpdateAnimation(float Speed)
 	{
-		
+		AnimationTimeLeft -= TimeManager.Instance.GetGameDeltaTime() * Speed * 0.41f;
+		if(AnimationTimeLeft <0)
+		{
+			AnimationTimeLeft = TimeBetweenFrame;
+			++CurrentFrame;
+			if(CurrentFrame == ConstMaxFrame)
+				CurrentFrame = 0;
+
+			BullRenderer.sprite = DictionaryOfSprite[BullSpriteBaseName + CurrentFrame];
+		}
 	}
 
 	public void Launch(TypeOfBull type, Vector3 spawnPos, float moveSpeed, bool faceRight)
