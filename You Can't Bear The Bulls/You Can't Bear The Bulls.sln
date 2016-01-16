@@ -1,7 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "You Can't Bear The Bulls.CSharp", "You Can't Bear The Bulls.CSharp.csproj", "{DEB40599-4433-EDA4-ACA0-AB0D380FA60A}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{E9A2C8DF-2F7F-D179-A4CD-52395BBA32DF}") = "You Can't Bear The Bulls", "Assembly-CSharp.csproj", "{84B137CA-2440-777B-DE25-E5DAA746EE8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DEB40599-4433-EDA4-ACA0-AB0D380FA60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DEB40599-4433-EDA4-ACA0-AB0D380FA60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DEB40599-4433-EDA4-ACA0-AB0D380FA60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DEB40599-4433-EDA4-ACA0-AB0D380FA60A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B137CA-2440-777B-DE25-E5DAA746EE8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B137CA-2440-777B-DE25-E5DAA746EE8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B137CA-2440-777B-DE25-E5DAA746EE8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B137CA-2440-777B-DE25-E5DAA746EE8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal
